@@ -1,0 +1,30 @@
+{
+  "name": "@frdl/webfan-server",
+  "version": "0.0.0",
+  "description": "Proxy, LoadBalancer, vHost Multiserver Application",
+  "main": "server.js",
+  "scripts": {
+    
+  },
+  "keywords": [
+    "reverse-proxy",
+    "proxy",
+    "load-balancer",
+    "vhost",
+    "default-domain"
+  ],
+  "author": "Till Wehowski",
+  "license": "MIT",
+  "homepage": "https://gitlab.com/webfan/webfan-server",
+  "dependencies": {
+    "http-proxy": "latest",
+    "http2": "latest",
+    "redwire": "latest",
+    "ip": "latest",
+    "finalhandler": "latest",
+    "serve-static": "latest"
+  },
+  "devDependencies": {
+
+  }
+}
