@@ -1,10 +1,10 @@
 
-
+/*
 if (typeof(PhusionPassenger) != 'undefined') {
     PhusionPassenger.configure({ autoInstall: false });
 }
 
-
+*/
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
@@ -12,7 +12,7 @@ var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 var deepMerge = require('@betafcc/deep-merge');
 var Redwire = require('redwire');
-
+var url_parse = url.parse;
 var ip = require('ip');
 
 const arrayDeepMerge = deepMerge.addCase(
@@ -28,12 +28,13 @@ var fallbackPort = 8082;
 
 var config = {
  vhosts : {
-	dir : __dirname + '/www/vhosts/',
+	dir : process.cwd() + '/www/vhosts/',
 	proxyfile : 'proxy.json',
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		  target : 'https://' + myIp +':' + fallbackPort.toString()
+		  target : '212.72.182.211'
+	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
  proxy :  {
@@ -49,8 +50,8 @@ var config = {
   },
   proxy : {
 	xfwd: false,
-        prependPath: true,
-        keepAlive: true
+        prependPath: true//,
+      //  keepAlive: false
   }
  }
 };
@@ -61,9 +62,9 @@ var configfile = process.cwd() +'/webfan-server.config';
 var configfile2 = __dirname +'/webfan-server.config';
 
 	  if(fs.existsSync(configfile + '.js')){
-		  config = arrayDeepMerge(config, require(configfile));
+		  config = deepMerge(config, require(configfile));
 	  }else if(fs.existsSync(configfile2 + '.js')){
-		  config = arrayDeepMerge(config, require(configfile2));
+		  config = deepMerge(require(configfile2));
 	  }else{
                 
           }
@@ -71,15 +72,20 @@ var configfile2 = __dirname +'/webfan-server.config';
 
 var options = config.proxy;
 
+
+var def = url_parse(config.vhosts.default.target);
+
 var redwire = new Redwire(options);
 
 
-const wildCardHandler = (mount, url, req, res, next)=>{
+var wildCardHandler = (mount, url, req, res, next)=>{
 	
            
 
            var pieces = url_parse(url);
-	   var rule = config.vhosts.default.target;
+	   var rule = {
+		   target: config.vhosts.default.target
+	   };
 	  
     // req.target is what redwire.proxy() uses to proxy to
 	  var dns = pieces.host.split(/\./).reverse();
@@ -94,7 +100,7 @@ const wildCardHandler = (mount, url, req, res, next)=>{
 		  rule.target = require(subdomainfile).target;
 	  }else if(fs.existsSync(domainfile)){
 		   rule.target = require(domainfile).target;
-	  }else if(fs.existsSync(docroot2)){
+	  }/*else if(fs.existsSync(docroot2)){
 		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot2)(req, res, done);
@@ -102,45 +108,46 @@ const wildCardHandler = (mount, url, req, res, next)=>{
 		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot)(req, res, done);
-	  }
+	  }*/
 	  
 	  
         req.target =rule.target;
 	  
-	    var tpath =   url_parse(rule.target);
-	    redwire.setHost(tpath.host).apply(this, arguments);
-
-	 // next();
+	   //  var tpath =   url_parse(rule.target);
+	   //  redwire.setHost(tpath.host).apply(this, arguments);
+    //         redwire.setHost(pieces.host).apply(this, arguments);
+	  next();
 };
 
 
 
-var url_parse = url.parse;
-var def = url_parse(config.vhosts.default.target);
+
 var wildcardHTTP=
  redwire .http('*')
  .use(wildCardHandler)
- .use(redwire.setHost(def.host))
+ //.use(redwire.setHost(def.host))
  .use(redwire.proxy());
 
 var wildcardHTTPS=
  redwire .https('*')
  .use(wildCardHandler)
- .use(redwire.setHost(def.host))
+ //.use(redwire.setHost(def.host))
  .use(redwire.proxy());
 
-
+ /* 
 var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
 	
  var localhostServer = http.createServer(function(req, res) {
     var done = finalhandler(req, res);
     return serve(req, res, done);
  });//.listen(config.vhosts.default.port);
+  
+   localhostServer.listen(config.vhosts.default.port);
+
 
 if (typeof(PhusionPassenger) != 'undefined') {	
     localhostServer.listen('passenger');
 } else {
-    localhostServer.listen(config.vhosts.default.port, process.env.host, () => { 
-		console.log(`Server running at http://${hostname}:${port}/`);
-	});
+    localhostServer.listen(config.vhosts.default.port);
 }
+*/
