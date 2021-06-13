@@ -43,6 +43,7 @@
 default:
   image: node:latest
   before_script:
+    - npm install
     - npm ci --cache .npm --prefer-offline
     - |
       {
