@@ -49,9 +49,9 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	xfwd: false,
-        prependPath: true//,
-      //  keepAlive: false
+        xfwd: true,
+        prependPath: true,
+        keepAlive: false
   }
  }
 };
