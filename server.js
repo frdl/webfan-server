@@ -1,5 +1,10 @@
 
 
+if (typeof(PhusionPassenger) != 'undefined') {
+    PhusionPassenger.configure({ autoInstall: false });
+}
+
+
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
@@ -119,7 +124,14 @@ var wildcard=
 
 var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
 
-http.createServer(function(req, res) {
+var localhostServer = http.createServer(function(req, res) {
    var done = finalhandler(req, res);
   return serve(req, res, done);
-}).listen(config.vhosts.default.port);
+});//.listen(config.vhosts.default.port);
+
+
+if (typeof(PhusionPassenger) != 'undefined') {
+    localhostServer.listen('passenger');
+} else {
+    localhostServer.listen(config.vhosts.default.port);
+}
