@@ -4,7 +4,8 @@
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "server.js",
   "scripts": {
-     "semantic-release": "semantic-release"
+     "semantic-release": "semantic-release",
+     "start": "node server.js"
   },
   "keywords": [
     "reverse-proxy",
