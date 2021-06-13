@@ -84,7 +84,7 @@ var wildcard=
  redwire .http('*')
   .use(function(mount, url, req, res, next) {
 	
-           var done = finalhandler(req, res);
+           
 
            var pieces = url_parse(url);
 	   var rule = config.vhosts.default.target;
@@ -99,13 +99,15 @@ var wildcard=
 	 var docroot2 = config.vhosts.dir + domain+'/'+pieces.host+'/'+config.vhosts.docroot;
 
 	  if(fs.existsSync(subdomainfile)){
-		  rule.target = require(domainfile).target;
+		  rule.target = require(subdomainfile).target;
 	  }else if(fs.existsSync(domainfile)){
-		   rule.target = require(subdomainfile).target;
+		   rule.target = require(domainfile).target;
 	  }else if(fs.existsSync(docroot2)){
+		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot2)(req, res, done);
 	  }else if(fs.existsSync(docroot)){
+		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot)(req, res, done);
 	  }
