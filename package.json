@@ -35,6 +35,9 @@
      "semantic-release": "latest",
      "@semantic-release/git": "latest",
      "@semantic-release/gitlab": "latest",
-     "@semantic-release/npm": "latest"
+     "@semantic-release/npm": "latest",
+         "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator"
+
   }
 }
