@@ -28,7 +28,7 @@ var config = {
   proxy : {
 	   xfwd: true,
         prependPath: true,
-        keepAlive: false
+        keepAlive: true
   }
  }
 };
