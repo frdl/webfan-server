@@ -142,5 +142,5 @@ if (typeof(PhusionPassenger) != 'undefined') {
 } else {
     localhostServer.listen(config.vhosts.default.port, process.env.host, () => { 
 		console.log(`Server running at http://${hostname}:${port}/`);
-	);
+	});
 }
