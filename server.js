@@ -48,7 +48,7 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	xfwd: true,
+	xfwd: false,
         prependPath: true,
         keepAlive: true
   }
@@ -74,15 +74,7 @@ var options = config.proxy;
 var redwire = new Redwire(options);
 
 
-
-
-
-
-var url_parse = url.parse;
-var def = url_parse(config.vhosts.default.target);
-var wildcard=
- redwire .http('*')
-  .use(function(mount, url, req, res, next) {
+const wildCardHandler = (mount, url, req, res, next)=>{
 	
            
 
@@ -119,21 +111,36 @@ var wildcard=
 	    redwire.setHost(tpath.host).apply(this, arguments);
 
 	 // next();
-  })
+};
+
+
+
+var url_parse = url.parse;
+var def = url_parse(config.vhosts.default.target);
+var wildcardHTTP=
+ redwire .http('*')
+ .use(wildCardHandler)
+ .use(redwire.setHost(def.host))
+ .use(redwire.proxy());
+
+var wildcardHTTPS=
+ redwire .https('*')
+ .use(wildCardHandler)
  .use(redwire.setHost(def.host))
  .use(redwire.proxy());
 
 
 var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
+	
+ var localhostServer = http.createServer(function(req, res) {
+    var done = finalhandler(req, res);
+    return serve(req, res, done);
+ });//.listen(config.vhosts.default.port);
 
-var localhostServer = http.createServer(function(req, res) {
-   var done = finalhandler(req, res);
-  return serve(req, res, done);
-});//.listen(config.vhosts.default.port);
-
-
-if (typeof(PhusionPassenger) != 'undefined') {
+if (typeof(PhusionPassenger) != 'undefined') {	
     localhostServer.listen('passenger');
 } else {
-    localhostServer.listen(config.vhosts.default.port);
+    localhostServer.listen(config.vhosts.default.port, process.env.host, () => { 
+		console.log(`Server running at http://${hostname}:${port}/`);
+	);
 }
