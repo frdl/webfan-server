@@ -4,7 +4,7 @@
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "server.js",
   "scripts": {
-    
+     "semantic-release": "semantic-release"
   },
   "keywords": [
     "reverse-proxy",
@@ -16,6 +16,12 @@
   "author": "Till Wehowski",
   "license": "MIT",
   "homepage": "https://gitlab.com/webfan/webfan-server",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files":[
+    "*"
+  ],
   "dependencies": {
     "http-proxy": "latest",
     "http2": "latest",
@@ -25,6 +31,9 @@
     "serve-static": "latest"
   },
   "devDependencies": {
-
+     "semantic-release": "latest",
+     "@semantic-release/git": "latest",
+     "@semantic-release/gitlab": "latest",
+     "@semantic-release/npm": "latest"
   }
 }
