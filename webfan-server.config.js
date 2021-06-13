@@ -11,7 +11,8 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		  target : 'https://' + myIp +':' + fallbackPort.toString()
+		   target : '212.72.182.211'
+	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
  proxy :  {
@@ -26,9 +27,9 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	   xfwd: true,
+	xfwd: true,
         prependPath: true,
-        keepAlive: true
+        keepAlive: false
   }
  }
 };
