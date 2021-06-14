@@ -24,6 +24,7 @@
     "*"
   ],
   "dependencies": {
+    "@frdl/frdl":">=5.0.6",
     "http-proxy": "latest",
     "http2": "latest",
     "redwire": "latest",
