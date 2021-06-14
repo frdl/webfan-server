@@ -2,7 +2,7 @@
   "name": "@frdl/webfan-server",
   "version": "0.0.2",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
      "semantic-release": "semantic-release",
      "start": "node server.js"
@@ -24,7 +24,7 @@
     "*"
   ],
   "dependencies": {
-    "@frdl/frdl":">=5.0.6",
+    "@frdl/frdl":"latest",
     "http-proxy": "latest",
     "http2": "latest",
     "redwire": "latest",
