@@ -79,7 +79,11 @@ var redwire = new Redwire(options);
 
 
 var wildCardHandler = (mount, url, req, res, next)=>{
+		
+    logging.log('WildcardRequest: ', arguments);
 	
+              req.setTimeout(120000);
+           
            
 
            var pieces = url_parse(url);
