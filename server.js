@@ -33,7 +33,7 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		  target : '212.72.182.211'
+		  target :myIp !== '212.53.140.43' ? '212.53.140.43' : '212.72.182.211'
 	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
@@ -115,7 +115,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	  
 	   //  var tpath =   url_parse(rule.target);
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
-    //         redwire.setHost(pieces.host).apply(this, arguments);
+              redwire.setHost(pieces.host).apply(this, arguments);
 	  next();
 };
 

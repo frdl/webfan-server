@@ -7,4 +7,4 @@ const { spawnSync } = require('child_process');
 //process.chdir(__dirname);
 //require( "./server");
 
-spawnSync(process.execPath,  ['frdl', 'autoload', './server'], { stdio: 'inherit' });
+spawnSync(process.execPath,  ['frdl', 'autoload', './server.js'], { stdio: 'inherit' });

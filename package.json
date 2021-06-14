@@ -17,7 +17,7 @@
   ],
   "author": "Till Wehowski",
   "license": "MIT",
-  "homepage": "https://gitlab.com/webfan/webfan-server",
+  "homepage": "https://github.com/frdl/webfan-server",
   "publishConfig": {
     "access": "public"
   },
