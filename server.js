@@ -33,7 +33,7 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		  target :myIp !== '212.53.140.43' ? '212.53.140.43' : '212.72.182.211'
+		  target :myIp !== process.env.host ?  myIp +':'+ fallbackPort.toString() : '212.72.182.211'
 	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
@@ -50,8 +50,8 @@ var config = {
   },
   proxy : {
         xfwd: true,
-        prependPath: true,
-        keepAlive: false
+        prependPath: true//,
+     //   keepAlive: false
   }
  }
 };
@@ -80,6 +80,7 @@ var redwire = new Redwire(options);
 
 var wildCardHandler = (mount, url, req, res, next)=>{
 	
+              req.setTimeout(120000);
            
 
            var pieces = url_parse(url);
@@ -115,7 +116,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	  
 	   //  var tpath =   url_parse(rule.target);
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
-              redwire.setHost(pieces.host).apply(this, arguments);
+            //  redwire.setHost(pieces.host).apply(this, arguments);
 	  next();
 };
 
