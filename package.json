@@ -1,11 +1,12 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
      "semantic-release": "semantic-release",
      "start": "node server.js"
+     "postinstall": "npm link"
   },
   "keywords": [
     "reverse-proxy",
@@ -24,21 +25,22 @@
     "*"
   ],
   "dependencies": {
-    "@frdl/frdl":">=5.0.6",
+    "@frdl/frdl":"latest",
     "http-proxy": "latest",
     "http2": "latest",
     "redwire": "latest",
     "ip": "latest",
     "finalhandler": "latest",
-    "serve-static": "latest"
+    "serve-static": "latest",
+     "@betafcc/deep-merge": "latest"
   },
   "devDependencies": {
      "semantic-release": "latest",
      "@semantic-release/git": "latest",
      "@semantic-release/gitlab": "latest",
      "@semantic-release/npm": "latest",
-         "@semantic-release/commit-analyzer": "latest",
-    "@semantic-release/release-notes-generator": "latest"
+      "@semantic-release/commit-analyzer": "latest",
+      "@semantic-release/release-notes-generator": "latest"
 
   }
 }
