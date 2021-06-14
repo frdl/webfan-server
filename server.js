@@ -5,6 +5,8 @@ if (typeof(PhusionPassenger) != 'undefined') {
 }
 
 */
+var logger = require('./logging');
+
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
@@ -40,11 +42,12 @@ var config = {
  proxy :  {
   http: {
     port: 80,
-    websockets: false
+    websockets: true
   },
 
   https: {
-    port: 443//,
+    port: 443,
+    websockets: true
   //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
@@ -79,6 +82,8 @@ var redwire = new Redwire(options);
 
 
 var wildCardHandler = (mount, url, req, res, next)=>{
+	
+    logging.log('WildcardRequest: ', arguments);
 	
               req.setTimeout(120000);
            
