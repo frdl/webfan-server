@@ -11,8 +11,9 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		   target :myIp !== '212.53.140.43' ? '212.53.140.43' : '212.72.182.211'
+		//  target :myIp !== process.env.host ?  myIp +':'+ fallbackPort.toString() : '212.72.182.211'
 	    	//target : myIp +':'+ fallbackPort.toString()
+		  target:'212.72.182.212'
 	}
  },
  proxy :  {
