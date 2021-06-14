@@ -5,6 +5,8 @@ if (typeof(PhusionPassenger) != 'undefined') {
 }
 
 */
+var logger = require('./logging');
+
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
@@ -33,25 +35,26 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		  target :myIp !== '212.53.140.43' ? '212.53.140.43' : '212.72.182.211'
+		  target :myIp !== process.env.host ?  myIp +':'+ fallbackPort.toString() : '212.72.182.211'
 	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
  proxy :  {
   http: {
     port: 80,
-    websockets: false
+    websockets: true
   },
 
   https: {
-    port: 443//,
+    port: 443,
+    websockets: true
   //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
         xfwd: true,
-        prependPath: true,
-        keepAlive: false
+        prependPath: true//,
+     //   keepAlive: false
   }
  }
 };
@@ -82,9 +85,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		
     logging.log('WildcardRequest: ', arguments);
 	
-              req.setTimeout(120000);
-           
-           
+     req.setTimeout(120000);
 
            var pieces = url_parse(url);
 	   var rule = {
@@ -119,7 +120,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	  
 	   //  var tpath =   url_parse(rule.target);
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
-              redwire.setHost(pieces.host).apply(this, arguments);
+            //  redwire.setHost(pieces.host).apply(this, arguments);
 	  next();
 };
 
