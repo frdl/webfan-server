@@ -30,9 +30,9 @@ var configfile = process.cwd() +'/webfan-server.config';
 var configfile2 = __dirname +'/webfan-server.config';
 
 	  if(fs.existsSync(configfile + '.js')){
-		  config = deepMerge(config, require(configfile));
+		var  config = deepMerge(config, require(configfile));
 	  }else if(fs.existsSync(configfile2 + '.js')){
-		  config = deepMerge(require(configfile2));
+		var  config = deepMerge(require(configfile2));
 	  }else{
                 
           }
