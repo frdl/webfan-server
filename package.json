@@ -25,6 +25,8 @@
   ],
   "dependencies": {
     "@frdl/frdl":"latest",
+    "@frdl/custom-require":"latest",
+    "winston-daily-rotate-file" : "latest",
     "http-proxy": "latest",
     "http2": "latest",
     "redwire": "latest",
@@ -37,8 +39,8 @@
      "@semantic-release/git": "latest",
      "@semantic-release/gitlab": "latest",
      "@semantic-release/npm": "latest",
-         "@semantic-release/commit-analyzer": "latest",
-    "@semantic-release/release-notes-generator": "latest"
+     "@semantic-release/commit-analyzer": "latest",
+     "@semantic-release/release-notes-generator": "latest"
 
   }
 }
