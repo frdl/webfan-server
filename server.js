@@ -24,42 +24,6 @@ const arrayDeepMerge = deepMerge.addCase(
 
 
 
-var myIp = ip.address();
-
-var fallbackPort = 8082;
-
-var config = {
- vhosts : {
-	dir : process.cwd() + '/www/vhosts/',
-	proxyfile : 'proxy.json',
-	docroot : 'httpdocs',
-	default : {
-		  port : fallbackPort,
-		//  target :myIp !== process.env.host ?  myIp +':'+ fallbackPort.toString() : '212.72.182.211'
-	    	//target : myIp +':'+ fallbackPort.toString()
-		  target:'212.72.182.212'
-	}
- },
- proxy :  {
-  http: {
-    port: 80,
-    websockets: true
-  },
-
-  https: {
-    port: 443,
-    websockets: true
-  //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
-  //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
-  },
-  proxy : {
-        xfwd: false,
-        prependPath: true//,
-     //   keepAlive: false
-  }
- }
-};
-
 
 //var config = require('./webfan-server.config');
 var configfile = process.cwd() +'/webfan-server.config';
