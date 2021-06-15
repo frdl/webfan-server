@@ -53,7 +53,7 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-        xfwd: true,
+        xfwd: false,
         prependPath: true//,
      //   keepAlive: false
   }
@@ -107,15 +107,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		  rule.target = require(subdomainfile).target;
 	  }else if(fs.existsSync(domainfile)){
 		   rule.target = require(domainfile).target;
-	  }/*else if(fs.existsSync(docroot2)){
-		  var done = finalhandler(req, res);
-		   redwire.setHost(req.host).apply(this, arguments);
-		   return serveStatic(docroot2)(req, res, done);
-	  }else if(fs.existsSync(docroot)){
-		  var done = finalhandler(req, res);
-		   redwire.setHost(req.host).apply(this, arguments);
-		   return serveStatic(docroot)(req, res, done);
-	  }*/
+	  }
 	  
 	  
         req.target =rule.target;
@@ -123,7 +115,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	   //  var tpath =   url_parse(rule.target);
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
             //  redwire.setHost(pieces.host).apply(this, arguments);
-	  next();
+	 // next();
 };
 
 
