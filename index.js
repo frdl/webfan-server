@@ -1,4 +1,4 @@
-
+/*
 const { spawnSync } = require('child_process');
 
 ////spawnSync(process.execPath, process.argv.slice(2), { stdio: 'inherit' })
@@ -8,3 +8,6 @@ const { spawnSync } = require('child_process');
 //require( "./server");
 
 spawnSync(process.execPath,  ['frdl', 'autoload', './server.js'], { stdio: 'inherit' });
+*/
+
+require( "./server");
