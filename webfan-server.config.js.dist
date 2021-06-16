@@ -1,5 +1,7 @@
 
 
+require('./logging');
+
 var ip = require('ip');
 var myIp = ip.address();
 
