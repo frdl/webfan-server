@@ -26,7 +26,7 @@
   ],
   "dependencies": {
     "npm-auto":"1.0.1",
-    "@frdl/custom-require":"latest",
+    "winston-syslog" : "latest",
     "winston" : "latest",
     "winston-daily-rotate-file" : "latest",
     "http-proxy": "latest",
