@@ -3,7 +3,14 @@
 var ip = require('ip');
 var myIp = ip.address();
 
-var fallbackPort = 8082;
+var target = '212.72.182.211';
+if(myIp === target){
+	target='212.72.182.212';
+}
+
+
+var fallbackPort = 80;
+
 var config = {
  vhosts : {
 	dir : __dirname + '/www/vhosts/',
@@ -11,9 +18,8 @@ var config = {
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
-		//  target :myIp !== process.env.host ?  myIp +':'+ fallbackPort.toString() : '212.72.182.211'
+		   target : target+':'+ fallbackPort.toString()
 	    	//target : myIp +':'+ fallbackPort.toString()
-		  target:'212.72.182.212'
 	}
  },
  proxy :  {
@@ -28,7 +34,7 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	xfwd: false,
+	   xfwd: true,
         prependPath: true,
         keepAlive: false
   }
