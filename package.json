@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,6 @@
   ],
   "dependencies": {
     "npm-auto":"1.0.1",
-    "@frdl/frdl":"latest",
     "@frdl/custom-require":"latest",
     "winston" : "latest",
     "winston-daily-rotate-file" : "latest",
