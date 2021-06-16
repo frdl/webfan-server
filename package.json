@@ -1,11 +1,12 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
      "semantic-release": "semantic-release",
-     "start": "frdl as server --product=@frdl/webfan-server"
+     "postinstall" : "npm link",
+     "start": "npm-auto ./server.js"
   },
   "keywords": [
     "reverse-proxy",
@@ -24,6 +25,7 @@
     "*"
   ],
   "dependencies": {
+    "npm-auto":"1.0.1",
     "@frdl/frdl":"latest",
     "@frdl/custom-require":"latest",
     "winston-daily-rotate-file" : "latest",
