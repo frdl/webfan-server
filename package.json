@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
      "semantic-release": "semantic-release",
-     "postinstall" : "npm link",
-     "start": "npm-auto ./server.js"
+     "postinstall" : "npm link && npm-auto ./index.js",
+     "start": "node ./index.js"
   },
   "keywords": [
     "reverse-proxy",
@@ -28,6 +28,7 @@
     "npm-auto":"1.0.1",
     "@frdl/frdl":"latest",
     "@frdl/custom-require":"latest",
+    "winston" : "latest",
     "winston-daily-rotate-file" : "latest",
     "http-proxy": "latest",
     "http2": "latest",
