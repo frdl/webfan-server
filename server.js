@@ -1,4 +1,5 @@
 
+
 /*
 if (typeof(PhusionPassenger) != 'undefined') {
     PhusionPassenger.configure({ autoInstall: false });
@@ -13,6 +14,7 @@ var deepMerge = require('@betafcc/deep-merge');
 var Redwire = require('redwire');
 var url_parse = url.parse;
 var ip = require('ip');
+var logger=require('./logging');
 
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -55,8 +57,8 @@ var config = {
   },
   proxy : {
 	   xfwd: true,
-        prependPath: true,
-        keepAlive: false
+        prependPath: true  // ,
+          // keepAlive: false
   }
  }
 };
@@ -85,7 +87,7 @@ var redwire = new Redwire(options);
 
 var wildCardHandler = (mount, url, req, res, next)=>{
 	
-           
+           logger.info('Hit: ', [mount, url]);
 
            var pieces = url_parse(url);
 	   var rule = {
@@ -103,8 +105,15 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 
 	  if(fs.existsSync(subdomainfile)){
 		  rule.target = require(subdomainfile).target;
+		    logger.info('Hit subdomainfile: ', {subdomainfile:subdomainfile, mount:mount, url:url});
+			    var tpath =   url_parse(rule.target);
+	            req.host=tpath.host;  
 	  }else if(fs.existsSync(domainfile)){
 		   rule.target = require(domainfile).target;
+		      //var tpath =   url_parse(rule.target);
+	         ///   req.host=tpath.host; 
+		    logger.info('Hit domainfile: ', {domainfile:domainfile, mount:mount, url:url});
+		  
 	  }/*else if(fs.existsSync(docroot2)){
 		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
@@ -115,10 +124,11 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		   return serveStatic(docroot)(req, res, done);
 	  }*/
 	  
-	  
+	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
         req.target =rule.target;
+
+	    logger.info('Hit target: ', {req:req, mount:mount, url:url});
 	  
-	   //  var tpath =   url_parse(rule.target);
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
 	  next();
