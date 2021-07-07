@@ -7,7 +7,7 @@ var winston = require('winston');
      //winston.add(new winston.transports.Syslog());
 
   var transport = new winston.transports.DailyRotateFile({
-    dirname: __dirname + '/logs.userlogs/',
+    dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
     filename: 'webfan-server-%DATE%.log',
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: true,
