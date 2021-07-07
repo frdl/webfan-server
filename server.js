@@ -60,8 +60,7 @@ var config = {
           prependPath: false  // ,
           // keepAlive: false
   }
- }
-});
+};
 
 
 //var config = require('./webfan-server.config');
