@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
      "semantic-release": "semantic-release",
-     "postinstall" : "npm link && npm-auto ./index.js",
+     "postinstall" : "npm-auto ./index.js",
      "start": "node ./index.js"
   },
   "keywords": [
