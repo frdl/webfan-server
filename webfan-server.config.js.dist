@@ -1,5 +1,4 @@
 
-
 require('./logging');
 
 var ip = require('ip');
@@ -17,6 +16,7 @@ var config = {
  vhosts : {
 	dir : __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
+	proxymodule : 'proxyhandler',
 	docroot : 'httpdocs',
 	default : {
 		  port : fallbackPort,
@@ -37,8 +37,8 @@ var config = {
   },
   proxy : {
 	   xfwd: true,
-        prependPath: true,
-        keepAlive: false
+        prependPath: false  // ,
+       //    keepAlive: false
   }
  }
 };
