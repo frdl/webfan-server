@@ -4,9 +4,10 @@
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
-     "semantic-release": "semantic-release",
-     "postinstall" : "npm-auto ./index.js",
-     "start": "node ./index.js"
+     "mypackman":"yarn",
+     "npm":"npm",
+     "yarn":"yarn",
+     "postinstall" : "npm-auto ./index.js"
   },
   "keywords": [
     "reverse-proxy",
@@ -35,15 +36,14 @@
     "ip": "latest",
     "finalhandler": "latest",
     "serve-static": "latest",
-    "@betafcc/deep-merge" : "latest"
+    "@betafcc/deep-merge" : "latest",    
+    "redbird" : "^0.10.0",
+    "@frdl/frdl" : "latest"
   },
   "devDependencies": {
-     "semantic-release": "latest",
-     "@semantic-release/git": "latest",
-     "@semantic-release/gitlab": "latest",
-     "@semantic-release/npm": "latest",
-     "@semantic-release/commit-analyzer": "latest",
-     "@semantic-release/release-notes-generator": "latest",
-     "@frdl/frdl" : "latest"
+
+  },
+  "peerDependencies": {
+     "yarn" : "latest"
   }
 }
