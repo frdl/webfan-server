@@ -10,4 +10,4 @@ const { spawnSync } = require('child_process');
 spawnSync(process.execPath,  ['frdl', 'autoload', './server.js'], { stdio: 'inherit' });
 */
 
-require( "./server");
+module.exports.create = require( "./server").create;
