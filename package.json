@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
