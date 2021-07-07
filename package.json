@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
@@ -19,9 +19,6 @@
   "author": "Till Wehowski",
   "license": "MIT",
   "homepage": "https://github.com/frdl/webfan-server",
-  "publishConfig": {
-    "access": "public"
-  },
   "files":[
     "*"
   ],
@@ -37,11 +34,10 @@
     "finalhandler": "latest",
     "serve-static": "latest",
     "@betafcc/deep-merge" : "latest",    
-    "redbird" : "^0.10.0",
-    "@frdl/frdl" : "latest"
+    "redbird" : "^0.10.0"
   },
   "devDependencies": {
-
+       "@frdl/frdl" : "latest"
   },
   "peerDependencies": {
      "yarn" : "latest"
