@@ -26,7 +26,7 @@ var myIp = ip.address();
 
 var target = '212.72.182.211';
 if(myIp === target){
-	target='212.72.182.212';
+	target='212.53.140.43';
 }
 
 
@@ -34,7 +34,7 @@ var fallbackPort = 80;
 
 var config = {
  vhosts : {
-	dir : __dirname + '/www/vhosts/',
+	dir :(fs.existsSync(  process.cwd() + '/www/vhosts')) ?   process.cwd() + '/www/vhosts/' :  __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
 	proxymodule : 'proxyhandler',
 	docroot : 'httpdocs',
@@ -56,8 +56,8 @@ var config = {
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	   xfwd: true,
-        prependPath: false  // ,
+	   xfwd: false,
+          prependPath: false  // ,
           // keepAlive: false
   }
  }
@@ -147,7 +147,9 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		//	    var tpath =   url_parse(rule.target);
 	    //        rule.host=tpath.host;  
 		//  }		  
-	  }/*else if(fs.existsSync(docroot2)){
+	  }
+	
+	  if(fs.existsSync(docroot2)){
 		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot2)(req, res, done);
@@ -155,7 +157,7 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		  var done = finalhandler(req, res);
 		   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot)(req, res, done);
-	  }*/
+	  }
 	  
 	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
         req.target =rule.target;
