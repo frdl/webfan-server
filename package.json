@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,8 @@
     "redwire": "latest",
     "ip": "latest",
     "finalhandler": "latest",
-    "serve-static": "latest"
+    "serve-static": "latest",
+    "@betafcc/deep-merge" : "latest"
   },
   "devDependencies": {
      "semantic-release": "latest",
