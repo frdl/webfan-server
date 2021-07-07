@@ -198,7 +198,11 @@ var wildcardHTTPS=
  .use(wildCardHandler)
  //.use(redwire.setHost(def.host))
  .use(redwire.proxy());
-
+return {
+	http2:wildcardHTTP2,
+	http:wildcardHTTP,
+	https:wildcardHTTPS
+};
  /* 
 var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
 	
