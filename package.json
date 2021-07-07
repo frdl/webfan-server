@@ -42,7 +42,7 @@
      "@semantic-release/gitlab": "latest",
      "@semantic-release/npm": "latest",
      "@semantic-release/commit-analyzer": "latest",
-     "@semantic-release/release-notes-generator": "latest"
-
+     "@semantic-release/release-notes-generator": "latest",
+     "@frdl/frdl" : "latest"
   }
 }
