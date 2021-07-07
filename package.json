@@ -19,6 +19,7 @@
   "author": "Till Wehowski",
   "license": "MIT",
   "homepage": "https://github.com/frdl/webfan-server",
+  "repository": "https://github.com/frdl/webfan-server.git",
   "files":[
     "*"
   ],
