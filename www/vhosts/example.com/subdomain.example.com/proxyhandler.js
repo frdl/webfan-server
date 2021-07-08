@@ -1,7 +1,7 @@
 
 
 
-module.exports = function handler(mount, url, req, res, next){
+module.exports = function handler(mount, url, req){
 	var r = { 
 		target : "https://webfan3.de",
 		host : "webfan3.de"
