@@ -33,7 +33,12 @@ Server.prototype.consruct=()=>{
 	  }
   });	 
   
-  
+    
+  prop(this, 'getLetsEncryptServers', {
+  	get : ()=>{
+		  return require( "./get-lets-encrypt-servers");
+	  }
+  });	
   prop(this, 'create', {
   	get : ()=>{
 		  return require( "./server").create;
