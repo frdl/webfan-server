@@ -25,23 +25,21 @@ const arrayDeepMerge = deepMerge.addCase(
 module.exports.create = conf => {
 var myIp = ip.address();
 
-var target = '212.72.182.211';
-if(myIp === target){
-	target='212.53.140.43';
-}
+//var target = '212.72.182.211';
+var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
 
-
-var fallbackPort = 80;
+var Port = 80;
 
 var config = {
  vhosts : {
+	balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
 	dir :(fs.existsSync(  process.cwd() + '/www/vhosts')) ?   process.cwd() + '/www/vhosts/' :  __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
 	proxymodule : 'proxyhandler',
 	docroot : 'httpdocs',
 	default : {
-		  port : fallbackPort,
-		   target : target+':'+ fallbackPort.toString()
+		  port : Port,
+		  target : target
 	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
@@ -119,54 +117,36 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	
 	if(fs.existsSync(docroot2)){
 		  var done = finalhandler(req, res);
-		//   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot2)(req, res, done);
 	  }else if(fs.existsSync(docroot)){
 		  var done = finalhandler(req, res);
-		//   redwire.setHost(req.host).apply(this, arguments);
 		   return serveStatic(docroot)(req, res, done);
-	  }else	if(fs.existsSync(subdomainproxymodule + '.js')){
+	  }else	if(fs.existsSync(subdomainproxymodule + '.js') || fs.existsSync(subdomainproxymodule)){
 		  var handler = require(subdomainproxymodule);
-		  rule = handler(mount, url, req, res, next);
+		  rule = handler(mount, url, req);
 		    logger.info('Hit subdomainproxymodule: ', {subdomainproxymodule:subdomainproxymodule, mount:mount, url:url});
-			 //   var tpath =   url_parse(rule.target);
-	         //   req.host=tpath.host;  
-	  }else if(fs.existsSync(domainproxymodule + '.js')){
+	  }else if(fs.existsSync(domainproxymodule + '.js') || fs.existsSync(domainproxymodule)){
 		  var handler = require(domainproxymodule);
-		  rule = handler(mount, url, req, res, next);
-		    logger.info('Hit domainproxymodule: ', {domainproxymodule:domainproxymodule, mount:mount, url:url});
-			//    var tpath =   url_parse(rule.target);
-	       //     req.host=tpath.host;  
+		  rule = handler(mount, url, req);
+		    logger.info('Hit domainproxymodule: ', {domainproxymodule:domainproxymodule, mount:mount, url:url}); 
 	  }else if(fs.existsSync(subdomainfile)){
 		  rule = require(subdomainfile);
 		    logger.info('Hit subdomainfile: ', {subdomainfile:subdomainfile, mount:mount, url:url});
-		//  if('undefined'===typeof rule.host){
-		//	    var tpath =   url_parse(rule.target);
-	   //         rule.host=tpath.host;  
-		//  }
 	  }else if(fs.existsSync(domainfile)){
 		   rule = require(domainfile);
-		      //var tpath =   url_parse(rule.target);
-	         ///   req.host=tpath.host; 
-		    logger.info('Hit domainfile: ', {domainfile:domainfile, mount:mount, url:url});
-		 // if('undefined'===typeof rule.host){
-		//	    var tpath =   url_parse(rule.target);
-	    //        rule.host=tpath.host;  
-		//  }		  
+		    logger.info('Hit domainfile: ', {domainfile:domainfile, mount:mount, url:url});	  
 	  }
 	  
 	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
-        req.target =rule.target;
+                  req.target = rule.target;
 			  
-	       if('string'===typeof rule.host){
-			     // mount.setHost(rule.host);
-			    //  redwire.setHost(rule.host).apply(this, arguments);
+	          if('string'===typeof rule.host){
 			    req.host = rule.host;
-		  	  //    redwire.setHost(rule.host).apply(this, arguments);
 		   }
-
-       //   req.host =('undefined'===typeof rule.host) ? req.host : rule.host;
-	   //   redwire.setHost(req.host).apply(this, arguments);
+	          if('string'===typeof rule.url){
+			    req.url = rule.url;
+		   }
+	
 	    logger.info('Hit target: ', {req:req, mount:mount, url:url});
 	  
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
@@ -176,25 +156,32 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 
 
 
+    var load = redwire.loadBalancer();
 
+	config.balancers.forEach(t=>{
+            load.add(t);
+	});
+	
+	
 var wildcardHTTP2=
  redwire .http2('*')
  .use(wildCardHandler)
- //.use(redwire.setHost(def.host))
+ .use(load.distribute())
  .use(redwire.proxy());
 
 var wildcardHTTP=
  redwire .http('*')
  .use(wildCardHandler)
- //.use(redwire.setHost(def.host))
+  .use(load.distribute())
  .use(redwire.proxy());
 
 var wildcardHTTPS=
  redwire .https('*')
  .use(wildCardHandler)
- //.use(redwire.setHost(def.host))
+  .use(load.distribute())
  .use(redwire.proxy());
 return {
+	redwire:redwire,
 	http2:wildcardHTTP2,
 	http:wildcardHTTP,
 	https:wildcardHTTPS
