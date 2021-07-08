@@ -1,45 +1,22 @@
 
-/*
-     "greenlock": "^2.4.2",
-    "le-acme-core": "^2.1.3",
-    "hubbie": "^4.2.0"
-    */
+
 'use strict';
 
 Server.prototype.consruct=()=>{
   
-  /*
-   var logger = winston.createLogger({
-    transports: [
-      transport,
-      new winston.transports.Syslog()
-    ]
-  });
-  
-  var redbird = new require('redbird')({
-	port: 8080,
 
-	// Specify filenames to default SSL certificates (in case SNI is not supported by the
-	// user's browser)
-	ssl: {
-		port: 8443,
-		key: "certs/dev-key.pem",
-		cert: "certs/dev-cert.pem",
-	}
-});
- */
   var props = {};
   
     
   prop(this, 'proxy', {
   	get : ()=>{
       if('undefined'===typeof props.proxy){
-        props.proxy =new require('redbird')({});
+        props.proxy =new (this.redbird)({});
       }
 		  return props.proxy;
 	  },
     set : (conf)=>{      
-	  	 props.proxy = new require('redbird')(conf);
+	  	 props.proxy = new (this.redbird)(conf);
 	  }
   });	 
   
@@ -105,6 +82,7 @@ Server.prototype.consruct=()=>{
 };
 
 module.exports=new Server();
+module.exports.Server=Server;
 /*
 module.exports.create = require( "./server").create;
 module.exports.logger = require('./logging');
