@@ -115,24 +115,29 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 
 	 var docroot = config.vhosts.dir + domain+'/'+config.vhosts.docroot;
 	 var docroot2 = config.vhosts.dir + domain+'/'+host+'/'+config.vhosts.docroot;
-
-	if(fs.existsSync(subdomainproxymodule + '.js')){
+ 
+	
+	if(fs.existsSync(docroot2)){
+		  var done = finalhandler(req, res);
+		//   redwire.setHost(req.host).apply(this, arguments);
+		   return serveStatic(docroot2)(req, res, done);
+	  }else if(fs.existsSync(docroot)){
+		  var done = finalhandler(req, res);
+		//   redwire.setHost(req.host).apply(this, arguments);
+		   return serveStatic(docroot)(req, res, done);
+	  }else	if(fs.existsSync(subdomainproxymodule + '.js')){
 		  var handler = require(subdomainproxymodule);
 		  rule = handler(mount, url, req, res, next);
 		    logger.info('Hit subdomainproxymodule: ', {subdomainproxymodule:subdomainproxymodule, mount:mount, url:url});
 			 //   var tpath =   url_parse(rule.target);
 	         //   req.host=tpath.host;  
-	  }else 
-
-	if(fs.existsSync(domainproxymodule + '.js')){
+	  }else if(fs.existsSync(domainproxymodule + '.js')){
 		  var handler = require(domainproxymodule);
 		  rule = handler(mount, url, req, res, next);
 		    logger.info('Hit domainproxymodule: ', {domainproxymodule:domainproxymodule, mount:mount, url:url});
 			//    var tpath =   url_parse(rule.target);
 	       //     req.host=tpath.host;  
-	  }else 
-		  
-	  if(fs.existsSync(subdomainfile)){
+	  }else if(fs.existsSync(subdomainfile)){
 		  rule = require(subdomainfile);
 		    logger.info('Hit subdomainfile: ', {subdomainfile:subdomainfile, mount:mount, url:url});
 		//  if('undefined'===typeof rule.host){
@@ -148,16 +153,6 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 		//	    var tpath =   url_parse(rule.target);
 	    //        rule.host=tpath.host;  
 		//  }		  
-	  }
-	
-	  if(fs.existsSync(docroot2)){
-		  var done = finalhandler(req, res);
-		   redwire.setHost(req.host).apply(this, arguments);
-		   return serveStatic(docroot2)(req, res, done);
-	  }else if(fs.existsSync(docroot)){
-		  var done = finalhandler(req, res);
-		   redwire.setHost(req.host).apply(this, arguments);
-		   return serveStatic(docroot)(req, res, done);
 	  }
 	  
 	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
