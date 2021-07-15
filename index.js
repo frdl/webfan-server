@@ -5,6 +5,10 @@
 var prop = Object.defineProperty;
 
 
+function Server(){
+  
+}
+
 
 Server.prototype.callBackApp =  (app, cb) =>{
 	 var that=this;
@@ -41,59 +45,67 @@ Server.prototype.queryApps = (arg, cb) => {
 				 }else if('undefined'!==typeof app.type){
 				   var type = app.type.split(/[\#\s\/\.]/);
 				   var query = arg.split(/\#/);	 
-				   if((type[0] === query[0] || '*' === query[0])  && (type[1] === query[1] || '*' === query[1])  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2])) ){
-				  	that.callBackApp(app, cb);
+				   if((type[0] === query[0] || '*' === query[0]) 
+					  && (type[1] === query[1] || '*' === query[1])
+					  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2]) ){
+				     	that.callBackApp(app, cb);
 				   }
 				 }
 			     }
 		      }else if('object' === typeof arg && 'undefined'!==typeof arg.key){
-			  if('undefined'===typeof arg.value){
-				that.queryApps(arg.key + '#*', cb);   
-			  }else{
+			    if('undefined'===typeof arg.value){
+				  that.queryApps(arg.key + '#*', cb);   
+			    }else{
 				  for(var i=0;i<that.apps.length;i++){
 					 var app = that.apps[i];
 					  if('undefined'!==typeof app[arg.key] && app[arg.key] === arg.value){
-						 return that.getApp(i, cb); 
+						   that.getApp(i, cb); 
 					  }
-				  }
-			  }
+				   }
+			     }
 		      }
 		  };
 
 
-Server.prototype.consruct=()=>{
+Server.prototype.close = arg => {		   
+	return this.queryApps(arg, 'close');   	
+};
+
+Server.prototype.constructor=function(){
   
 
   var props = {},that=this;
   var _apps = [];	
   
 		
-  prop(this, 'apps', {
+  prop(that, 'apps', {
   	get : ()=>{
 		  return _apps;
 	  }
   });	  
-  prop(this, 'close', {
+  prop(that, 'close', {
   	get : ()=>{
 		  return arg => {
 		      that.queryApps(arg, 'close');   
 		  };
 	  }
   });    
-  prop(this, 'proxy', {
+	
+	
+  prop(that, 'proxy', {
   	get : ()=>{
       if('undefined'===typeof props.proxy){
-        props.proxy =new (this.redbird)({});
+        props.proxy =new (that.redbird)({});
       }
 		  return props.proxy;
 	  },
     set : (conf)=>{      
-	  	 props.proxy = new (this.redbird)(conf);
+	  	 props.proxy = new (that.redbird)(conf);
 	  }
   });	 
   
   
-   prop(this, 'hubbie', {
+   prop(that, 'hubbie', {
   	get : ()=>{
       if('undefined'===typeof props.hubbie){
         props.hubbie =require('hubbie');
@@ -106,47 +118,15 @@ Server.prototype.consruct=()=>{
   });	 
   
     
-  prop(this, 'getLetsEncryptServers', {
+  prop(that, 'getLetsEncryptServers', {
   	get : ()=>{
 		  return require( "./get-lets-encrypt-servers");
 	  }
   });	
-  prop(this, 'create', {
-  	get : ()=>{
-	       var fn = require( "./server").create;
-		var create = fn.bind(that);
-		return create;
-	  }
-  });	
-    prop(this, 'greenlock', {
-  	get : ()=>{
-		  return require( "greenlock");
-	  }
-  });	  
-  prop(this, 'redwire', {
-  	get : ()=>{
-		  return require( "redwire");
-	  }
-  });	  
-  prop(this, 'ip', {
-  	get : ()=>{
-		  return require( "ip");
-	  }
-  });	   
+
+   
   
-  prop(this, 'redbird', {
-  	get : ()=>{
-		  return require( "redbird");
-	  }
-  });	  
-  
-  prop(this, 'finalhandler', {
-  	get : ()=>{
-		  return require( "finalhandler");
-	  }
-  });	   
-  
-  prop(this, 'logger', {
+  prop(that, 'logger', {
   	get : ()=>{
       if('undefined'===typeof props.logger){
         props.logger =require('./logging');
@@ -158,19 +138,50 @@ Server.prototype.consruct=()=>{
 	  }
   });	
   
+	return that;
 };
 
-module.exports=new Server();
-module.exports.Server=Server;
-/*
-module.exports.create = require( "./server").create;
-module.exports.logger = require('./logging');
-module.exports.redwire = require('redwire');
-module.exports.ip = require('ip');
-module.exports.redbird = require('redbird');
-module.exports.finalhandler = require('finalhandler');
-*/
-function Server(){
-  
-}
 
+Server.prototype.create = () =>{
+	 var that=this;
+     var fn = require( "./server").create;
+     var create = fn.bind(that);
+	 return create.apply(that,Array.prototype.slice.call(arguments));
+};
+
+
+   prop(Server.prototype, 'greenlock', {
+  	get : ()=>{
+		  return require( "greenlock");
+	  }
+  });	  
+  prop(Server.prototype, 'redwire', {
+  	get : ()=>{
+		  return require( "redwire");
+	  }
+  });	  
+  prop(Server.prototype, 'ip', {
+  	get : ()=>{
+		  return require( "ip");
+	  }
+  });	   
+  
+  prop(Server.prototype, 'redbird', {
+  	get : ()=>{
+		  return require( "redbird");
+	  }
+  });	  
+  
+  prop(Server.prototype, 'finalhandler', {
+  	get : ()=>{
+		  return require( "finalhandler");
+	  }
+  });	
+
+
+  prop(Server, 'create', {
+  	get : ()=>{
+		  return (new Server).create;
+	  }
+  });	
+module.exports = Server;
