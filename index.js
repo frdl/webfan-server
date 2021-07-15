@@ -2,6 +2,8 @@
 
 'use strict';
 
+var prop = Object.defineProperty;
+
 Server.prototype.consruct=()=>{
   
 
@@ -100,6 +102,3 @@ function Server(){
   
 }
 
-function prop() {
-  return Object.defineProperty(...arguments);
-}	
