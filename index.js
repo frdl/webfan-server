@@ -124,6 +124,9 @@ Server.prototype.constructor=function(options){
 		  return _apps;
 	  },
 	  set : (app)=>{
+		  if(Array.isArray(app.type)){
+		       app.type = app.type.join('#');	  
+		  }
 		  _apps.push({
 			    name:app.name || 'App' + _apps.length.toString(),
 				type : app.type || 'UNDEFINED#UNDEFINED#UNDEFINED' + _apps.length.toString(),
