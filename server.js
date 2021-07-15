@@ -154,7 +154,7 @@ var wildcardHTTPS=
  }
  wildcardHTTPS.use(redwire.proxy());
 	
-	
+	//!apps.push: left-hand assignment-style setter
 	this.apps = {
 	      name : 'ReverseProxyServerOfRedwirewildcardHTTP' + this.apps,length,
 	      type : ['server', 'proxy/redwire', 'http'],
