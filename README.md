@@ -16,6 +16,6 @@ var Server = require("@frdl/webfan-server");
 /*
 var mountHandlers =Server.create(path.resolve(__dirname, 'webfan-server.config.js'));
 */
-var WebfanServer = new Server(path.resolve(__dirname, 'webfan-server.config.js'));
-WebfanServer.create();
+var WebfanServer = new Server();
+WebfanServer.create(path.resolve(__dirname, 'webfan-server.config.js'));
 ````
