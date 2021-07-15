@@ -4,12 +4,70 @@
 
 var prop = Object.defineProperty;
 
+
+
+Server.prototype.callBackApp =  (app, cb) =>{
+	 var that=this;
+	 if('string'=== typeof cb){
+					 return that[cb](app);
+				 }else if('function'=== typeof cb){
+					  return cb(app);
+				 }else{
+				     return app; 
+	}
+};
+
+
+Server.prototype.getApp = (ix, cb) =>{
+	 var that=this;
+		      if(!isNaN(ix)){
+				 var app = that.apps[ix];
+			         return  that.callBackApp(app, cb);
+   
+		      }else{
+			  return that.queryApps(ix, cb);    
+		      }
+};
+
+Server.prototype.queryApps = (arg, cb) => {
+	var that=this;
+		      if(!isNaN(arg)){
+				 return that.getApp(arg, cb); 
+		      }else if('string'===typeof arg){
+			     for(var i=0;i<that.apps.length;i++){
+				 var app = that.apps[i];
+				 if(arg === app.name){
+					 that.callBackApp(app, cb);
+				 }else if('undefined'!==typeof app.type){
+				   var type = app.type.split(/[\#\s\/\.]/);
+				   var query = arg.split(/\#/);	 
+				   if((type[0] === query[0] || '*' === query[0])  && (type[1] === query[1] || '*' === query[1])  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2])) ){
+				  	that.callBackApp(app, cb);
+				   }
+				 }
+			     }
+		      }else if('object' === typeof arg && 'undefined'!==typeof arg.key){
+			  if('undefined'===typeof arg.value){
+				that.queryApps(arg.key + '#*', cb);   
+			  }else{
+				  for(var i=0;i<that.apps.length;i++){
+					 var app = that.apps[i];
+					  if('undefined'!==typeof app[arg.key] && app[arg.key] === arg.value){
+						 return that.getApp(i, cb); 
+					  }
+				  }
+			  }
+		      }
+		  };
+
+
 Server.prototype.consruct=()=>{
   
 
   var props = {},that=this;
   var _apps = [];	
   
+		
   prop(this, 'apps', {
   	get : ()=>{
 		  return _apps;
@@ -18,27 +76,7 @@ Server.prototype.consruct=()=>{
   prop(this, 'close', {
   	get : ()=>{
 		  return arg => {
-		      if(!isNaN(arg)){
-				 var app = that.apps[arg];
-					if('function'===typeof app.app.close){
-					    app.app.close();	
-					}else if('function'===typeof app.app.stop){
-					    app.app.stop();	
-					}else{
-						throw new Error(`App ${arg}# - ${app.title} is not closable and not stopable!`);
-					}
-		      }else if('string'===typeof arg){
-			     for(var i=0;i<that.apps.length;i++){
-				 var app = that.apps[i];
-				 if('undefined'!==typeof app.type){
-				   var type = app.type.split(/[\#\s\/\.]/);
-				   var query = arg.split(/\#/);	 
-				   if((type[0] === query[0] || '*' === query[0])  && (type[1] === query[1] || '*' === query[1])  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2])) ){
-				  	that.close(i);
-				   }
-				 }
-			     }
-		      }
+		      that.queryApps(arg, 'close');   
 		  };
 	  }
   });    
