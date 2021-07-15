@@ -1,13 +1,13 @@
 
-require('./logging');
+
 
 var ip = require('ip');
 var myIp = ip.address();
 
 var Port = process.env.port;
 
-//var target = '212.72.182.211';
-var target = 'https://frdl.ws/frdlwebuserworkspace';
+var target = '212.72.182.211';
+//var target = 'https://frdl.ws/frdlwebuserworkspace';
 
 var config = {
  vhosts : {
