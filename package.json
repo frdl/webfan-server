@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
    "publishConfig": {
@@ -34,7 +34,7 @@
     "winston-syslog" : "latest",
     "winston" : "latest",
     "winston-daily-rotate-file" : "latest",
-    "http-proxy": "latest",
+    "http-proxy": ">=1.18.1",
     "http2": "latest",
     "redwire": "latest",
     "ip": "latest",
