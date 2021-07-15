@@ -1,7 +1,7 @@
 
 'use strict';
 
-
+var typeHashRegex = /([\#\s\/\.\:])|(\-\>)|(\:\:)/;
 var deepMerge = require('@betafcc/deep-merge');
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -23,7 +23,8 @@ function Server(){
 
 const _methdoAlias ={
 	'stop': 'close',
-	'start': 'listen',	
+	'start': 'listen',
+	'unregister' : '__frdl_decache'
 };
 Server.prototype.callBackApp =  (app, cb, args) =>{
 	 var that=this, alias2 = swapObjectFlip(_methdoAlias);
@@ -68,8 +69,8 @@ Server.prototype.queryApps = (arg, cb, args) => {
 				 if(arg === app.name){
 					 that.callBackApp(app, cb, args);
 				 }else if('undefined'!==typeof app.type){
-				   var type = app.type.split(/[\#\s\/\.]/);
-				   var query = arg.split(/\#/);	 
+				   var type = app.type.split(typeHashRegex);
+				   var query = arg.split(typeHashRegex);
 				   if((type[0] === query[0] || '*' === query[0]) 
 					  && (type[1] === query[1] || '*' === query[1])
 					  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2]) ){
@@ -101,6 +102,25 @@ Server.prototype.constructor=function(options){
   var _conf = arrayDeepMerge(require('./get-configuration'), options.config || {});
   var props = {},that=this;
   var _apps = [];	
+
+	
+	
+   prop(that, 'unregister', {
+  	get : ()=>{
+		  return (route, target) => {
+		      that.queryApps('server#proxy/redwire', 'unregister', [route, target]);  
+	              that.queryApps('server#proxy/redbird', 'unregister', [route, target]);   
+		  };
+	  }
+  });    
+   prop(that, 'unregister', {
+  	get : ()=>{
+		  return (route, target) => {
+		      that.queryApps('server#proxy/redwire', 'unregister', [route, target]);  
+	              that.queryApps('server#proxy/redbird', 'unregister', [route, target]);   
+		  };
+	  }
+  });    	
 	
   prop(that, 'addApp', {
   	get : ()=>{
