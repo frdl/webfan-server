@@ -11,7 +11,11 @@ $ npm install @frdl/webfan-server
 Example server.js
 ````javascript
 var path = require('path');
-var WebfanServer = require("@frdl/webfan-server");
-var mountHandlers = WebfanServer.create(path.resolve(__dirname, 'webfan-server.config.js'));
-console.log(mountHandlers);
+var Server = require("@frdl/webfan-server");
+
+/*
+var mountHandlers =Server.create(path.resolve(__dirname, 'webfan-server.config.js'));
+*/
+var WebfanServer = new Server(path.resolve(__dirname, 'webfan-server.config.js'));
+WebfanServer.create();
 ````
