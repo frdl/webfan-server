@@ -56,8 +56,9 @@ var config = {
   }
  },
  logrotate:{
+    frequency : '1h',	 
     dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
-    filename: 'webfan-server-%DATE%.log.txt',
+    filename: `webfan-server-${Port}-%DATE%.log.txt`,
     datePattern: 'YYYY-MM-DD-HH',
     zippedArchive: true,
     maxSize: '4096k',
@@ -66,19 +67,17 @@ var config = {
 };
 
 
-//var config = require('./webfan-server.config');
-var configfile = process.cwd() +'/webfan-server.config';
-var configfile2 = __dirname +'/webfan-server.config';
 
-	  iif(fs.existsSync(configfile)){
+var fileLocations = [process.cwd() +'/webfan-server.config', __dirname +'/webfan-server.config', __dirname +'/webfan-server.config.dist'];
+for(var i=0;i<fileLocations.length;i++){
+	var configfile = fileLocations[i];
+	  if(fs.existsSync(configfile)){
 		  config = deepMerge(config, require(configfile.substr(0,configfile.length-3)));
-	  }else if(fs.existsSync(configfile2)){
-		  config = deepMerge(require(configfile2.substr(0,configfile2.length-3)));
+		  break;
 	  }else if(fs.existsSync(configfile + '.js')){
 		  config = deepMerge(config, require(configfile));
-	  }else if(fs.existsSync(configfile2 + '.js')){
-		  config = deepMerge(require(configfile2));
+		  break;
 	  }
-
+}
 
 module.exports=config;
