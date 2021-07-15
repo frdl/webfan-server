@@ -14,7 +14,7 @@ var deepMerge = require('@betafcc/deep-merge');
 var Redwire = require('redwire');
 var url_parse = url.parse;
 var ip = require('ip');
-var logger=require('./logging');
+
 
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -23,6 +23,9 @@ const arrayDeepMerge = deepMerge.addCase(
 
 
 module.exports.create = conf => {
+	//var logger=require('./logging');
+	var logger=this.logger;
+	
 var myIp = ip.address();
 
 //var target = '212.72.182.211';
@@ -126,6 +129,14 @@ var wildCardHandler = (mount, url, req, res, next)=>{
             load.add(t);
 	});
 	
+
+var wildcardHTTP=
+ redwire .http('*')
+ .use(wildCardHandler);
+ if(0<load.length){
+  wildcardHTTP.use(load.distribute());
+ }
+ wildcardHTTP.use(redwire.proxy());
 	
 var wildcardHTTP2=
  redwire .http2('*')
@@ -135,14 +146,6 @@ var wildcardHTTP2=
  }
  wildcardHTTP2.use(redwire.proxy());
 
-var wildcardHTTP=
- redwire .http('*')
- .use(wildCardHandler);
- if(0<load.length){
-  wildcardHTTP.use(load.distribute());
- }
- wildcardHTTP.use(redwire.proxy());
-
 var wildcardHTTPS=
  redwire .https('*')
  .use(wildCardHandler);
@@ -151,13 +154,33 @@ var wildcardHTTPS=
  }
  wildcardHTTPS.use(redwire.proxy());
 	
+	
+	this.apps = {
+	      name : 'ReverseProxyServerOfRedwirewildcardHTTP' + this.apps,length,
+	      type : ['server', 'proxy/redwire', 'http'],
+	      app : wildcardHTTP
+	};
+	this.apps = {
+	      name : 'ReverseProxyServerOfRedwirewildcardHTTP2' + this.apps,length,
+	      type : ['server', 'proxy/redwire', 'http2'],
+	      app : wildcardHTTP2
+	};
+	this.apps = {
+	      name : 'ReverseProxyServerOfRedwirewildcardHTTPS' + this.apps,length,
+	      type : ['server', 'proxy/redwire', 'https'],
+	      app : wildcardHTTPS
+	};
+
+	
+	return this;
+ /* 	
 return {
 	redwire:redwire,
 	http2:wildcardHTTP2,
 	http:wildcardHTTP,
 	https:wildcardHTTPS
 };
- /* 
+
 var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
 	
  var localhostServer = http.createServer(function(req, res) {
