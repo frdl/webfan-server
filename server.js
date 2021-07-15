@@ -28,36 +28,43 @@ var myIp = ip.address();
 //var target = '212.72.182.211';
 var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
 
-var Port = 80;
+var Port = process.env.port;
+
+//var target = '212.72.182.211';
+var target = 'https://frdl.ws/frdlwebuserworkspace';
 
 var config = {
  vhosts : {
-	balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
-	dir :(fs.existsSync(  process.cwd() + '/www/vhosts')) ?   process.cwd() + '/www/vhosts/' :  __dirname + '/www/vhosts/',
+	//balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
+	balancers : [],
+	dir : __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
 	proxymodule : 'proxyhandler',
 	docroot : 'httpdocs',
 	default : {
 		  port : Port,
 		  target : target
-	    	//target : myIp +':'+ fallbackPort.toString()
 	}
  },
  proxy :  {
   http: {
+    port: 8080,
+    websockets: false
+  },
+  http2: {
     port: 80,
     websockets: false
   },
-
   https: {
-    port: 443//,
+    port: 443,
+    websockets: false
   //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
 	   xfwd: false,
-          prependPath: false  // ,
-          // keepAlive: false
+           prependPath: false  // ,
+       //    keepAlive: false
   }
  }
 };
