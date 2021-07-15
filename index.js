@@ -7,7 +7,7 @@ var prop = Object.defineProperty;
 Server.prototype.consruct=()=>{
   
 
-  var props = {};
+  var props = {},that=this;
   
     
   prop(this, 'proxy', {
@@ -43,7 +43,9 @@ Server.prototype.consruct=()=>{
   });	
   prop(this, 'create', {
   	get : ()=>{
-		  return require( "./server").create;
+	       var fn = require( "./server").create;
+		var create = fn.bind(that);
+		return create;
 	  }
   });	
     prop(this, 'greenlock', {
