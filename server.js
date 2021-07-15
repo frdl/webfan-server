@@ -1,5 +1,4 @@
-
-
+ 
 /*
 if (typeof(PhusionPassenger) != 'undefined') {
     PhusionPassenger.configure({ autoInstall: false });
@@ -23,6 +22,9 @@ const arrayDeepMerge = deepMerge.addCase(
 
 
 module.exports.create = conf => {
+'use strict';
+	
+	var that=this;
 	//var logger=require('./logging');
 	var logger=this.logger;
 	
@@ -36,7 +38,7 @@ var Port = process.env.port;
 //var target = '212.72.182.211';
 var target = 'https://frdl.ws/frdlwebuserworkspace';
 
-var config = require('./get-configuration');
+var config = deepMerge(require('./get-configuration'), this.config || {});
 
 	  if('object'===typeof conf && null!==conf && !Array.isArray(conf)){
 		  config = deepMerge(config, conf);
@@ -55,7 +57,7 @@ var def = url_parse(config.vhosts.default.target);
 var redwire = new Redwire(options);
 
 
-var wildCardHandler = (mount, url, req, res, next)=>{
+function wildCardHandler(mount, url, req, res, next)=>{
 	
            logger.info('Hit: ', [mount, url]);
 
@@ -118,81 +120,48 @@ var wildCardHandler = (mount, url, req, res, next)=>{
 	  
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
-	  next();
-};
+	 return next();
+}
 
 
-
+	
+function __frdl_decache(route, target){
+	
+}
+	
+ if(0<config.balancers.length){
     var load = redwire.loadBalancer();
 
 	config.balancers.forEach(t=>{
             load.add(t);
 	});
-	
-
-var wildcardHTTP=
- redwire .http('*')
- .use(wildCardHandler);
- if(0<load.length){
-  wildcardHTTP.use(load.distribute());
  }
- wildcardHTTP.use(redwire.proxy());
-	
-var wildcardHTTP2=
- redwire .http2('*')
- .use(wildCardHandler);
- if(0<load.length){
-  wildcardHTTP2.use(load.distribute());
- }
- wildcardHTTP2.use(redwire.proxy());
 
-var wildcardHTTPS=
- redwire .https('*')
- .use(wildCardHandler);
- if(0<load.length){
-  wildcardHTTPS.use(load.distribute());
- }
- wildcardHTTPS.use(redwire.proxy());
-	
-	//!apps.push: left-hand assignment-style setter
-	this.apps = {
-	      name : 'ReverseProxyServerOfRedwirewildcardHTTP' + this.apps,length,
-	      type : ['server', 'proxy/redwire', 'http'],
-	      app : wildcardHTTP
-	};
-	this.apps = {
-	      name : 'ReverseProxyServerOfRedwirewildcardHTTP2' + this.apps,length,
-	      type : ['server', 'proxy/redwire', 'http2'],
-	      app : wildcardHTTP2
-	};
-	this.apps = {
-	      name : 'ReverseProxyServerOfRedwirewildcardHTTPS' + this.apps,length,
-	      type : ['server', 'proxy/redwire', 'https'],
-	      app : wildcardHTTPS
-	};
 
 	
-	return this;
- /* 	
-return {
-	redwire:redwire,
-	http2:wildcardHTTP2,
-	http:wildcardHTTP,
-	https:wildcardHTTPS
-};
-
-var serve = serveStatic(config.vhosts.dir + '_._/' + config.vhosts.docroot);
+[['http', '*'],['http2','*'], ['https', '*']].forEach(info=>{
 	
- var localhostServer = http.createServer(function(req, res) {
-    var done = finalhandler(req, res);
-    return serve(req, res, done);
- });//.listen(config.vhosts.default.port);
-  
-   localhostServer.listen(config.vhosts.default.port);
-if (typeof(PhusionPassenger) != 'undefined') {	
-    localhostServer.listen('passenger');
-} else {
-    localhostServer.listen(config.vhosts.default.port);
-}
-*/
+	var app = redwire[info[0]](info[1]);
+	
+	app.use(wildCardHandler);
+
+	if(0<config.balancers.length && 'undefined'!==typeof load && 'function'===typeof load.distribute){
+		app.use(load.distribute());
+	}	
+	
+	app.use(redwire.proxy());
+
+	
+	app.__frdl_decache = __frdl_decache;
+	
+	that.apps = {
+	      name : 'ReverseProxyServerOfRedwirewildcard' + info[0].toUpperCase() + that.apps.length,
+	      type : ['server', 'proxy/redwire', info[0]],
+	      app : app
+	};	
+});
+	 
+
+	
+ return this;
 };
