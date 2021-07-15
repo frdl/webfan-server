@@ -54,7 +54,15 @@ var config = {
            prependPath: false  // ,
        //    keepAlive: false
   }
- }
+ },
+ logrotate:{
+    dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
+    filename: 'webfan-server-%DATE%.log.txt',
+    datePattern: 'YYYY-MM-DD-HH',
+    zippedArchive: true,
+    maxSize: '4096k',
+    maxFiles: '7d'
+  }
 };
 
 
