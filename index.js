@@ -30,8 +30,12 @@ Server.prototype.consruct=()=>{
 		      }else if('string'===typeof arg){
 			     for(var i=0;i<that.apps.length;i++){
 				 var app = that.apps[i];
-				 if(app.protocolType === arg){
-					that.close(i);
+				 if('undefined'!==typeof app.type){
+				   var type = app.type.split(/[\#\s\/\.]/);
+				   var query = arg.split(/\#/);	 
+				   if((type[0] === query[0] || '*' === query[0])  && (type[1] === query[1] || '*' === query[1])  && ('undefined'===typeof query[2] || type[2] === query[2] || '*' === query[2] || '' === query[2])) ){
+				  	that.close(i);
+				   }
 				 }
 			     }
 		      }
