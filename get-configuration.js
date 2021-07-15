@@ -62,12 +62,10 @@ var config = {
 var configfile = process.cwd() +'/webfan-server.config';
 var configfile2 = __dirname +'/webfan-server.config';
 
-	  if('object'===typeof conf && null!==conf && !Array.isArray(conf)){
-		  config = deepMerge(config, conf);
-	  }else if('string'===typeof conf && fs.existsSync(conf)){
-		  config = deepMerge(config, require(conf.substr(0, conf.length-3)));
-	  }else if('string'===typeof conf && fs.existsSync(conf + '.js')){
-		  config = deepMerge(config, require(conf));
+	  iif(fs.existsSync(configfile)){
+		  config = deepMerge(config, require(configfile.substr(0,configfile.length-3)));
+	  }else if(fs.existsSync(configfile2)){
+		  config = deepMerge(require(configfile2.substr(0,configfile2.length-3)));
 	  }else if(fs.existsSync(configfile + '.js')){
 		  config = deepMerge(config, require(configfile));
 	  }else if(fs.existsSync(configfile2 + '.js')){
