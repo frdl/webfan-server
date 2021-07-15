@@ -4,13 +4,8 @@ require('./logging');
 var ip = require('ip');
 var myIp = ip.address();
 
-var target = '212.72.182.211';
-if(myIp === target){
-	target='212.72.182.212';
-}
-
-
-var fallbackPort = 80;
+//var target = '212.72.182.211';
+var target = 'https://frdl.ws/frdlwebuserworkspace';
 
 var config = {
  vhosts : {
@@ -19,25 +14,28 @@ var config = {
 	proxymodule : 'proxyhandler',
 	docroot : 'httpdocs',
 	default : {
-		  port : fallbackPort,
-		   target : target+':'+ fallbackPort.toString()
-	    	//target : myIp +':'+ fallbackPort.toString()
+		  port : process.env.port,
+		  target : target
 	}
  },
  proxy :  {
   http: {
+    port: 8080,
+    websockets: false
+  },
+  http2: {
     port: 80,
     websockets: false
   },
-
   https: {
-    port: 443//,
+    port: 443,
+    websockets: false
   //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
   proxy : {
-	   xfwd: true,
-        prependPath: false  // ,
+	   xfwd: false,
+           prependPath: false  // ,
        //    keepAlive: false
   }
  }
