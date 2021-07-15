@@ -8,8 +8,36 @@ Server.prototype.consruct=()=>{
   
 
   var props = {},that=this;
+  var _apps = [];	
   
-    
+  prop(this, 'apps', {
+  	get : ()=>{
+		  return _apps;
+	  }
+  });	  
+  prop(this, 'close', {
+  	get : ()=>{
+		  return arg => {
+		      if(!isNaN(arg)){
+				 var app = that.apps[arg];
+					if('function'===typeof app.app.close){
+					    app.app.close();	
+					}else if('function'===typeof app.app.stop){
+					    app.app.stop();	
+					}else{
+						throw new Error(`App ${arg}# - ${app.title} is not closable and not stopable!`);
+					}
+		      }else if('string'===typeof arg){
+			     for(var i=0;i<that.apps.length;i++){
+				 var app = that.apps[i];
+				 if(app.protocolType === arg){
+					that.close(i);
+				 }
+			     }
+		      }
+		  };
+	  }
+  });    
   prop(this, 'proxy', {
   	get : ()=>{
       if('undefined'===typeof props.proxy){
