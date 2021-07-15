@@ -53,7 +53,31 @@ var config = {
 	   xfwd: false,
            prependPath: false  // ,
        //    keepAlive: false
-  }
+  },
+  log: {
+        debug: function() {
+	   console.debug(...arguments);
+	},
+        notice: function() {
+	   console.notice(...arguments);
+	},
+        log: function() {
+	   console.log(...arguments);
+	},
+        warn: function() {
+	   console.warn(...arguments);
+	},
+        info: function() {
+	   console.info(...arguments);
+	},
+        error: function(err) {
+            if (err.stack) {
+                console.error(err.stack);
+            } else {
+                console.error(err);
+            }
+        }
+    }
  },
  logrotate:{
     frequency : '1h',	 
