@@ -10,6 +10,15 @@ const arrayDeepMerge = deepMerge.addCase(
 );
 
 
+async function logMessage(type, args){
+	var method2 = ('function'===typeof console[type]) ? console[type] : console.log;
+	method2(...args);
+	
+      var logger=require('./logging');
+       var method = ('function'===typeof logger[type]) ? logger[type] : logger.log;
+	method(...args);	
+	
+}
 
 var myIp = ip.address();
 
@@ -56,25 +65,27 @@ var config = {
   },
   log: {
         debug: function() {
-	   console.debug(...arguments);
+	 logMessage('debug', ...arguments);
 	},
         notice: function() {
-	   console.notice(...arguments);
+	  logMessage('notice', ...arguments);
 	},
         log: function() {
-	   console.log(...arguments);
+	   logMessage('log', ...arguments);
 	},
         warn: function() {
-	   console.warn(...arguments);
+	   logMessage('warn', ...arguments);
 	},
         info: function() {
-	   console.info(...arguments);
+	  logMessage('info', ...arguments);
 	},
         error: function(err) {
             if (err.stack) {
                 console.error(err.stack);
+		    logMessage('error', [err.stack]);
             } else {
                 console.error(err);
+		    logMessage('error', [err]);
             }
         }
     }
