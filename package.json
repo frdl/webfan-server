@@ -28,6 +28,7 @@
     "*"
   ],
   "dependencies": {
+    "decache": "4.6.0",
     "npm-auto":"1.0.1",
     "winston-syslog" : "latest",
     "winston" : "latest",
