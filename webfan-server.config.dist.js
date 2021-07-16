@@ -15,7 +15,8 @@ var config = {
 	balancers : [],
 	dir : __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
-	proxymodule : 'proxyhandler',
+	proxymodule : 'proxyhandler.js',
+	domainmetrics : '.metrics.js',
 	docroot : 'httpdocs',
 	default : {
 		  port : Port,
