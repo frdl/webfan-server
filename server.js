@@ -162,12 +162,6 @@ function wildCardHandler(mount, url, req, res, next){
 		//  , host : host
 	   };
 	  
-	
-          if(true===Metafiles.host.mount.config.exists){
-		 rule = deepMerge(rule, require(Metafiles.host.mount.config.file));
-	  }else	if(true===Metafiles.domain.mount.router.exists){
-		 rule = deepMerge(rule,  require(Metafiles.domain.mount.config.file));
-	  }
 		   
 	if(true===Metafiles.host.mount.router.exists){
 		  var file = Metafiles.host.mount.router.file;
@@ -177,7 +171,11 @@ function wildCardHandler(mount, url, req, res, next){
 		  var file = Metafiles.domain.mount.router.file;
 		  var handler = require(file.substr(0,file.length-3));
 		  rule =  deepMerge(rule, handler(mount, url, req));
-	  } 	   
+	  }else if(true===Metafiles.host.mount.config.exists){
+		 rule = deepMerge(rule, require(Metafiles.host.mount.config.file));
+	  }else	if(true===Metafiles.domain.mount.config.exists){
+		 rule = deepMerge(rule,  require(Metafiles.domain.mount.config.file));
+	  }
 	
 	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
                   req.target = rule.target;
@@ -197,7 +195,7 @@ function wildCardHandler(mount, url, req, res, next){
 	
 	//req.reqIp
           if(true!==Metafiles.host.mount.metrics.exists){
-		mkdir(path.dirname(Metafiles.host.mount.metrics.file)/*, x0755*/);
+		mkdir(path.dirname(Metafiles.host.mount.metrics.file));
 		fs.writeFile(Metafiles.host.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
 		   if(e){
 			logger.info(e);   
@@ -206,7 +204,7 @@ function wildCardHandler(mount, url, req, res, next){
 	  }
 	
 	  if(true!==Metafiles.domain.mount.metrics.exists){
-		mkdir(path.dirname(Metafiles.domain.mount.metrics.file)/*, x0755*/);
+		mkdir(path.dirname(Metafiles.domain.mount.metrics.file));
 		fs.writeFile(Metafiles.domain.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
 		   if(e){
 			logger.info(e);   
