@@ -7,12 +7,12 @@ if (typeof(PhusionPassenger) != 'undefined') {
 var fs = require('fs');
 var Url = require('url');
 var http = require('http');
-//var finalhandler = require('finalhandler');
+var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 var deepMerge = require('@betafcc/deep-merge');
-//var Redwire = require('redwire');
+var Redwire = require('redwire');
 var url_parse = Url.parse;
-//var ip = require('ip');
+var ip = require('ip');
 var requestIp = require('request-ip');
 var net = require('net');
 var mkdir = require('mkdir');
@@ -28,12 +28,12 @@ module.exports.create = conf => {
 'use strict';
 
  var that=this;
-var ip =that.ip;
+//var ip =that.ip;
 	//var logger=require('./logging');
-var logger=that.logger;
-var Redwire = that.redwire;	
+//var logger=that.logger;
+//var Redwire = that.redwire;	
 var myIp = ip.address();
-var finalhandler = that.finalhandler;
+//var finalhandler = that.finalhandler;
 //var target = '212.72.182.211';
 //var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
 
@@ -143,7 +143,7 @@ host :  {
 }
 	
 	
-function wildCardHandler(mount, url, req, res, next)=>{
+function wildCardHandler(mount, url, req, res, next){
 	
            logger.info('Hit: ', [mount, url]);
 	 
