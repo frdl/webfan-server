@@ -214,10 +214,12 @@ Server.prototype.constructor=function(options){
 
 
 Server.prototype.create = () =>{
-	 var that=this;
-     var fn = require( "./server").create;
-     var create = fn.bind(that);
-	 return create.apply(that,Array.prototype.slice.call(arguments));
+	
+    return require( "./server").create.apply(this,Array.prototype.slice.call(arguments));
+	// var that=this;
+     //var fn = require( "./server").create;
+    // var create = fn.bind(that);
+//	 return create.apply(that,Array.prototype.slice.call(arguments));
 };
 
 
