@@ -196,18 +196,18 @@ function wildCardHandler(mount, url, req, res, next){
 	    logger.info('Hit target: ', {req:req, mount:mount, url:url, fromIp:req.reqIp});		
 	
 	//req.reqIp
-          if(true!==Metafiles.host.mount.config.exists){
-		mkdir(path.dirname(Metafiles.host.mount.config.file)/*, x0755*/);
-		fs.writeFile(Metafiles.host.mount.config.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+          if(true!==Metafiles.host.mount.metrics.exists){
+		mkdir(path.dirname(Metafiles.host.mount.metrics.file)/*, x0755*/);
+		fs.writeFile(Metafiles.host.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
 		   if(e){
 			logger.info(e);   
 		   }
 		});
 	  }
 	
-	  if(true!==Metafiles.domain.mount.router.exists){
-		mkdir(path.dirname(Metafiles.domain.mount.config.file)/*, x0755*/);
-		fs.writeFile(Metafiles.domain.mount.config.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+	  if(true!==Metafiles.domain.mount.metrics.exists){
+		mkdir(path.dirname(Metafiles.domain.mount.metrics.file)/*, x0755*/);
+		fs.writeFile(Metafiles.domain.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
 		   if(e){
 			logger.info(e);   
 		   }
@@ -224,7 +224,7 @@ function wildCardHandler(mount, url, req, res, next){
 	
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
-   return next();
+    next();
 }
 
 
