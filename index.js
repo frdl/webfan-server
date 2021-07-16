@@ -213,13 +213,8 @@ Server.prototype.constructor=function(options){
 };
 
 
-Server.prototype.create = () =>{
-	
-    return require( "./server").create.apply(this,Array.prototype.slice.call(arguments));
-	// var that=this;
-     //var fn = require( "./server").create;
-    // var create = fn.bind(that);
-//	 return create.apply(that,Array.prototype.slice.call(arguments));
+Server.prototype.create = (conf) =>{
+	 return require( "./server").create.apply(this,[conf, this]);
 };
 
 
@@ -255,7 +250,7 @@ Server.prototype.create = () =>{
   prop(Server, 'create', {
   	get : ()=>{
 		return options => {
-		  return (new Server(options)).create(options.config || {});
+		  return (new Server()).create(options);
 		};
 	  }
   });	
