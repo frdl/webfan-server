@@ -15,6 +15,7 @@ var url_parse = url.parse;
 //var ip = require('ip');
 var requestIp = require('request-ip');
 var net = require('net');
+var mkdir = require('mkdir');
 
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -68,7 +69,10 @@ function getHostFiles(mount, url, req){
 	  var domain =  dns[1] + '.' + dns[0];
 	  var host = pieces.host;	
 	
-		
+	
+	 var domainmetrics = config.vhosts.dir + domain+'/'+config.vhosts.domainmetrics;	 
+	 var subdomainmetrics = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.domainmetrics;	
+	
 	 var domainfile = config.vhosts.dir + domain+'/'+config.vhosts.proxyfile;	 
 	 var subdomainfile = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxyfile;
 	
@@ -95,6 +99,10 @@ domain : {
 		config : {
 		   file : domainfile,
 		   exists : fs.existsSync(domainfile)
+		},
+		metrics : {
+		   file : domainmetrics,
+		   exists : fs.existsSync(domainmetrics)
 		}
 		
 	}	
@@ -114,12 +122,18 @@ host :  {
 		config : {
 		   file : subdomainfile,
 		   exists : fs.existsSync(subdomainfile)
+		},
+		metrics : {
+		   file : subdomainmetrics,
+		   exists : fs.existsSync(subdomainmetrics)
 		}		
 	}	
 },
 	
 	route : {
-		hash:dns
+		url : url,
+		parsed : pieces,
+		dns:dns
 	}
 	
   };
