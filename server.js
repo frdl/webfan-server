@@ -24,10 +24,10 @@ const arrayDeepMerge = deepMerge.addCase(
 );
 const decache = require('decache');
 
-module.exports.create = conf => {
+module.exports.create = (conf, T) => {
 'use strict';
 
- var that=this;
+ var that=T;
 //var ip =that.ip;
 	//var logger=require('./logging');
 //var logger=that.logger;
@@ -269,7 +269,7 @@ function __frdl_decache(route, target){
 	});
  }
 
-	that.apps = {
+	if(T.apps)that.apps = {
 	      name : 'RedwireReverseProxyServer' + that.apps.length,
 	      type : ['server', 'proxy/redwire', 'Redwire'],
 	      app : redwire
@@ -302,8 +302,8 @@ function __frdl_decache(route, target){
 	
 	app.__frdl_decache = __frdl_decache;
 	
-	that.apps = {
-	      name : 'WildcardMountOfRedwire' + info[0].toUpperCase() + 'Server' + that.apps.length,
+	if(T.apps)T.apps = {
+	      name : 'WildcardMountOfRedwire' + info[0].toUpperCase() + 'Server' + T.apps.length,
 	      type : ['app', 'proxy/redwire', info[0]],
 	      app : app
 	};	
