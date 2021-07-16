@@ -14,7 +14,7 @@ var Redwire = require('redwire');
 var url_parse = Url.parse;
 var ip = require('ip');
 var requestIp = require('request-ip');
-var net = require('net');
+
 var mkdir = require('mkdir');
 var path = require('path');
 
@@ -191,12 +191,12 @@ function wildCardHandler(mount, url, req, res, next){
 			 res.headers['x-forwarded-for'] = req.reqIp;  
 		   }
 	
-	    logger.info('Hit target: ', {req:req, mount:mount, url:url, fromIp:req.reqIp});		
+	    logger.info('Hit target: ', {req:req, mount:mount, url:url});		
 	
 	//req.reqIp
           if(true!==Metafiles.host.mount.metrics.exists){
 		mkdir(path.dirname(Metafiles.host.mount.metrics.file));
-		fs.writeFile(Metafiles.host.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+		fs.writeFile(Metafiles.host.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url}) , e=>{
 		   if(e){
 			logger.info(e);   
 		   }
@@ -205,7 +205,7 @@ function wildCardHandler(mount, url, req, res, next){
 	
 	  if(true!==Metafiles.domain.mount.metrics.exists){
 		mkdir(path.dirname(Metafiles.domain.mount.metrics.file));
-		fs.writeFile(Metafiles.domain.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+		fs.writeFile(Metafiles.domain.mount.metrics.file, JSON.stringify({req:req, mount:mount, url:url}) , e=>{
 		   if(e){
 			logger.info(e);   
 		   }
@@ -276,6 +276,7 @@ function __frdl_decache(route, target){
 [['http', '*'],['http2','*'], ['https', '*']].forEach(info=>{
 	
 	var app = redwire[info[0]](info[1]);
+	/*
 	app.use(requestIp.mw({ attributeName : 'reqIp' }));
 	app.use(function(mount, url, req, res, next) {
                // use our custom attributeName that we registered in the middleware
@@ -289,6 +290,7 @@ function __frdl_decache(route, target){
 		next();     
 	     }
 	});
+	*/
 	app.use(wildCardHandler);
 
 	if(0<config.balancers.length && 'undefined'!==typeof load && 'function'===typeof load.distribute){
