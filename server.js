@@ -34,7 +34,8 @@ var myIp = ip.address();
 var finalhandler = that.finalhandler;
 //var target = '212.72.182.211';
 //var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
-
+const decache = require('decache');
+	
 var Port = process.env.port;
 
 //var target = '212.72.182.211';
@@ -58,7 +59,69 @@ var def = url_parse(config.vhosts.default.target);
 
 var redwire = new Redwire(options);
 
+	
 
+	
+function getHostFiles(mount, url, req){
+      var pieces = url_parse(url);	
+      var dns = pieces.host.split(/\./).reverse();
+	  var domain =  dns[1] + '.' + dns[0];
+	  var host = pieces.host;	
+	
+		
+	 var domainfile = config.vhosts.dir + domain+'/'+config.vhosts.proxyfile;	 
+	 var subdomainfile = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxyfile;
+	
+	
+	 var domainproxymodule = config.vhosts.dir + domain+'/'+config.vhosts.proxymodule;	 
+	 var subdomainproxymodule = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxymodule;  
+
+	 var docroot = config.vhosts.dir + domain+'/'+config.vhosts.docroot;
+	 var docroot2 = config.vhosts.dir + domain+'/'+host+'/'+config.vhosts.docroot;
+	
+	
+	
+ var exp = {
+	domain : {
+		name : domain,
+		vhost : {
+		   file : docroot,
+		   exists : fs.existsSync(docroot)
+		},
+		router : {
+		   file : domainproxymodule,
+		   exists : fs.existsSync(domainproxymodule)
+		},
+		target : {
+		   file : domainfile,
+		   exists : fs.existsSync(domainfile)
+		}
+	},
+	host :  {
+		name : host,
+		vhost : {
+		   file : docroot2,
+		   exists : fs.existsSync(docroot2)
+		},
+		router : {
+		   file : subdomainproxymodule,
+		   exists : fs.existsSync(subdomainproxymodule)
+		},
+		target : {
+		   file : subdomainfile,
+		   exists : fs.existsSync(subdomainfile)
+		}
+	},
+	dns : {
+		hash:dns
+	}
+	
+  };
+	
+   return exp;
+}
+	
+	
 function wildCardHandler(mount, url, req, res, next)=>{
 	
            logger.info('Hit: ', [mount, url]);
@@ -67,8 +130,6 @@ function wildCardHandler(mount, url, req, res, next)=>{
       var dns = pieces.host.split(/\./).reverse();
 	  var domain =  dns[1] + '.' + dns[0];
 	  var host = pieces.host;
-	
-	  target
 	
 	   var target = _target;
 	   try{
