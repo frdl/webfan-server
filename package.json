@@ -28,6 +28,7 @@
     "*"
   ],
   "dependencies": {
+    "mkdir" : "latest",
     "node-json2html" : "latest",
     "decache": "4.6.0",
     "npm-auto":"1.0.1",
