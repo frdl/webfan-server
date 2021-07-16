@@ -80,10 +80,10 @@ function getHostFiles(mount, url, req){
 	 var docroot2 = config.vhosts.dir + domain+'/'+host+'/'+config.vhosts.docroot;
 	
 	
-	
- var exp = {
-	domain : {
-		name : domain,
+var exp = {
+domain : {
+	name : domain,
+	mount : {
 		vhost : {
 		   file : docroot,
 		   exists : fs.existsSync(docroot)
@@ -92,13 +92,17 @@ function getHostFiles(mount, url, req){
 		   file : domainproxymodule,
 		   exists : fs.existsSync(domainproxymodule)
 		},
-		target : {
+		config : {
 		   file : domainfile,
 		   exists : fs.existsSync(domainfile)
 		}
-	},
-	host :  {
-		name : host,
+		
+	}	
+},
+host :  {
+	name : host,
+	mount : {
+
 		vhost : {
 		   file : docroot2,
 		   exists : fs.existsSync(docroot2)
@@ -107,12 +111,14 @@ function getHostFiles(mount, url, req){
 		   file : subdomainproxymodule,
 		   exists : fs.existsSync(subdomainproxymodule)
 		},
-		target : {
+		config : {
 		   file : subdomainfile,
 		   exists : fs.existsSync(subdomainfile)
-		}
-	},
-	dns : {
+		}		
+	}	
+},
+	
+	route : {
 		hash:dns
 	}
 	
