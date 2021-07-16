@@ -23,20 +23,21 @@ async function logMessage(type, args){
 var myIp = ip.address();
 
 //var target = '212.72.182.211';
-var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
+//var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
 
 var Port = process.env.port;
 
 //var target = '212.72.182.211';
 var target = 'https://frdl.ws/frdlwebuserworkspace';
 
-var config = { 
- //balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
- balancers : [],
+var config = {	
+  //balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
+  balancers : [],
  vhosts : {
+
 	dir : __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
-	proxymodule : 'proxyhandler',
+	proxymodule : 'proxyhandler.js',
 	docroot : 'httpdocs',
 	default : {
 		  port : Port,
@@ -46,11 +47,11 @@ var config = {
  proxy :  {
   http: {
     port: 8080//,
-  //  websockets: false
+   // websockets: false
   },
   http2: {
     port: 80//,
- //   websockets: false
+  //  websockets: false
   },
   https: {
     port: 443//,
@@ -107,10 +108,10 @@ var fileLocations = [process.cwd() +'/webfan-server.config', __dirname +'/webfan
 for(var i=0;i<fileLocations.length;i++){
 	var configfile = fileLocations[i];
 	  if(fs.existsSync(configfile)){
-		  config = deepMerge(config, require(configfile.substr(0,configfile.length-3)));
+		  config = arrayDeepMerge(config, require(configfile));
 		  break;
 	  }else if(fs.existsSync(configfile + '.js')){
-		  config = deepMerge(config, require(configfile));
+		  config = arrayDeepMerge(config, require(configfile + '.js'));
 		  break;
 	  }
 }
