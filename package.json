@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
    "publishConfig": {
@@ -28,7 +28,6 @@
     "*"
   ],
   "dependencies": {
-    "@frdl/frdl" : "latest",
     "node-json2html" : "latest",
     "decache": "4.6.0",
     "npm-auto":"1.0.1",
@@ -49,9 +48,11 @@
     "request-ip" : "2.1.3"
   },
   "devDependencies": {
+       "yarn" : "latest",
+       "@frdl/frdl" : "latest",
        "get-lets-encrypt-servers" : "1.0.0"
   },
   "peerDependencies": {
-     "yarn" : "latest"
+    
   }
 }
