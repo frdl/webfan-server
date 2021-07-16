@@ -45,16 +45,16 @@ var config = {
  },
  proxy :  {
   http: {
-    port: 8080,
-    websockets: false
+    port: 8080//,
+  //  websockets: false
   },
   http2: {
-    port: 80,
-    websockets: false
+    port: 80//,
+ //   websockets: false
   },
   https: {
-    port: 443,
-    websockets: false
+    port: 443//,
+   // websockets: false
   //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
   //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
   },
