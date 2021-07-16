@@ -30,10 +30,10 @@ var Port = process.env.port;
 //var target = '212.72.182.211';
 var target = 'https://frdl.ws/frdlwebuserworkspace';
 
-var config = {
+var config = { 
+ //balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
+ balancers : [],
  vhosts : {
-	//balancers : ['localhost:6000', 'localhost:6001', 'localhost:6002'],
-	balancers : [],
 	dir : __dirname + '/www/vhosts/',
 	proxyfile : 'proxy.json',
 	proxymodule : 'proxyhandler',
