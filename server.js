@@ -13,7 +13,8 @@ var deepMerge = require('@betafcc/deep-merge');
 //var Redwire = require('redwire');
 var url_parse = url.parse;
 //var ip = require('ip');
-
+var requestIp = require('request-ip');
+var net = require('net');
 
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -125,7 +126,7 @@ function wildCardHandler(mount, url, req, res, next)=>{
 		   }
 		   if(true===typeof rule.xfwd){
 			 res.headers['x-forwarded-host'] = req.host;
-			 res.headers['x-forwarded-for'] = req.host;  
+			 res.headers['x-forwarded-for'] = req.reqIp;  
 		   }
 	    logger.info('Hit target: ', {req:req, mount:mount, url:url});
 	  
@@ -153,7 +154,19 @@ function __frdl_decache(route, target){
 [['http', '*'],['http2','*'], ['https', '*']].forEach(info=>{
 	
 	var app = redwire[info[0]](info[1]);
-	
+	app.use(requestIp.mw({ attributeName : 'reqIp' }));
+	app.use(function(mount, url, req, res, next) {
+               // use our custom attributeName that we registered in the middleware
+               var ip = req.reqIp;
+              // https://nodejs.org/api/net.html#net_net_isip_input
+              var ipType = net.isIP(ip); // returns 0 for invalid, 4 for IPv4, and 6 for IPv6
+             if(0==ipType){
+		logger.warn('Invalid IP access atempt: ' + ip,    {req:req, mount:mount, url:url, ip:ip});   
+		res.end('Invalid IP access atempt: ' + ip);
+	     }else{
+		next();     
+	     }
+	});
 	app.use(wildCardHandler);
 
 	if(0<config.balancers.length && 'undefined'!==typeof load && 'function'===typeof load.distribute){
