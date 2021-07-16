@@ -1,6 +1,6 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
    "publishConfig": {
@@ -8,9 +8,6 @@
      "registry": "https://npm.pkg.github.com/frdl"
   },
   "scripts": {
-     "mypackman":"yarn",
-     "npm":"npm",
-     "yarn":"yarn",
      "postinstall" : "npm-auto ./index.js"
   },
   "keywords": [
@@ -24,9 +21,6 @@
   "license": "MIT",
   "homepage": "https://github.com/frdl/webfan-server",
   "repository": "https://github.com/frdl/webfan-server.git",
-  "files":[
-    "*"
-  ],
   "dependencies": {
     "mkdir" : "latest",
     "node-json2html" : "latest",
