@@ -145,57 +145,39 @@ host :  {
 function wildCardHandler(mount, url, req, res, next)=>{
 	
            logger.info('Hit: ', [mount, url]);
-
-      var pieces = url_parse(url);	
-      var dns = pieces.host.split(/\./).reverse();
-	  var domain =  dns[1] + '.' + dns[0];
-	  var host = pieces.host;
+	 
+	   var Metafiles = getHostFiles(mount, url, req);	
 	
 	   var target = _target;
 	   try{
 		    if('string'===typeof config.vhosts.default.target){
 			target =config.vhosts.default.target;     
 		    }
+	   }catch(_e){
+		   
+	   }
 	   var rule = {
 		   target: target
 		//  , host : host
 	   };
 	  
-    // req.target is what redwire.proxy() uses to proxy to
-
-	 var domainfile = config.vhosts.dir + domain+'/'+config.vhosts.proxyfile;	 
-	 var subdomainfile = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxyfile;
 	
-	
-	 var domainproxymodule = config.vhosts.dir + domain+'/'+config.vhosts.proxymodule;	 
-	 var subdomainproxymodule = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxymodule;  
-
-	 var docroot = config.vhosts.dir + domain+'/'+config.vhosts.docroot;
-	 var docroot2 = config.vhosts.dir + domain+'/'+host+'/'+config.vhosts.docroot;
- 
-	
-	if(fs.existsSync(docroot2)){
-		  var done = finalhandler(req, res);
-		   return serveStatic(docroot2)(req, res, done);
-	  }else if(fs.existsSync(docroot)){
-		  var done = finalhandler(req, res);
-		   return serveStatic(docroot)(req, res, done);
-	  }else	if(fs.existsSync(subdomainproxymodule + '.js') || fs.existsSync(subdomainproxymodule)){
-		  var handler = require(subdomainproxymodule);
-		  rule = handler(mount, url, req);
-		    logger.info('Hit subdomainproxymodule: ', {subdomainproxymodule:subdomainproxymodule, mount:mount, url:url});
-	  }else if(fs.existsSync(domainproxymodule + '.js') || fs.existsSync(domainproxymodule)){
-		  var handler = require(domainproxymodule);
-		  rule = handler(mount, url, req);
-		    logger.info('Hit domainproxymodule: ', {domainproxymodule:domainproxymodule, mount:mount, url:url}); 
-	  }else if(fs.existsSync(subdomainfile)){
-		  rule = require(subdomainfile);
-		    logger.info('Hit subdomainfile: ', {subdomainfile:subdomainfile, mount:mount, url:url});
-	  }else if(fs.existsSync(domainfile)){
-		   rule = require(domainfile);
-		    logger.info('Hit domainfile: ', {domainfile:domainfile, mount:mount, url:url});	  
+          if(true===Metafiles.host.mount.config.exists){
+		 rule = deepMerge(rule, require(Metafiles.host.mount.config.file));
+	  }else	if(true===Metafiles.domain.mount.router.exists){
+		 rule = deepMerge(rule,  require(Metafiles.domain.mount.config.file));
 	  }
-	  
+		   
+	if(true===Metafiles.host.mount.router.exists){
+		  var file = Metafiles.host.mount.router.file;
+		  var handler = require(file.substr(0,file.length-3));
+		  rule =  deepMerge(rule, handler(mount, url, req));
+	  }else	if(true===Metafiles.domain.mount.router.exists){
+		  var file = Metafiles.domain.mount.router.file;
+		  var handler = require(file.substr(0,file.length-3));
+		  rule =  deepMerge(rule, handler(mount, url, req));
+	  } 	   
+	
 	  //  logger.info('Hit rule: ', {rule:rule, mount:mount, url:url});
                   req.target = rule.target;
 			  
@@ -209,11 +191,21 @@ function wildCardHandler(mount, url, req, res, next)=>{
 			 res.headers['x-forwarded-host'] = req.host;
 			 res.headers['x-forwarded-for'] = req.reqIp;  
 		   }
-	    logger.info('Hit target: ', {req:req, mount:mount, url:url});
-	  
+	
+	    logger.info('Hit target: ', {req:req, mount:mount, url:url});		
+	
+	
+	  if(true===Metafiles.host.mount.vhost.exists){
+		  var done = finalhandler(req, res);
+		   return serveStatic(Metafiles.host.mount.vhost.dir || Metafiles.host.mount.vhost.file)(req, res, done);
+	  }else if(true===Metafiles.domain.mount.vhost.exists){
+		  var done = finalhandler(req, res);
+		   return serveStatic(Metafiles.domain.mount.vhost.dir || Metafiles.domain.mount.vhost.file)(req, res, done);
+	  }		
+	
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
-    next();
+   return next();
 }
 
 
