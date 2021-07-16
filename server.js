@@ -132,7 +132,7 @@ function wildCardHandler(mount, url, req, res, next)=>{
 	  
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
-	 return next();
+    next();
 }
 
 
@@ -149,7 +149,11 @@ function __frdl_decache(route, target){
 	});
  }
 
-
+	that.apps = {
+	      name : 'RedwireReverseProxyServer' + that.apps.length,
+	      type : ['server', 'proxy/redwire', 'Redwire'],
+	      app : redwire
+	};	
 	
 [['http', '*'],['http2','*'], ['https', '*']].forEach(info=>{
 	
@@ -179,8 +183,8 @@ function __frdl_decache(route, target){
 	app.__frdl_decache = __frdl_decache;
 	
 	that.apps = {
-	      name : 'ReverseProxyServerOfRedwirewildcard' + info[0].toUpperCase() + that.apps.length,
-	      type : ['server', 'proxy/redwire', info[0]],
+	      name : 'WildcardMountOfRedwire' + info[0].toUpperCase() + 'Server' + that.apps.length,
+	      type : ['app', 'proxy/redwire', info[0]],
 	      app : app
 	};	
 });
