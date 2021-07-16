@@ -1,14 +1,14 @@
 {
   "name": "@frdl/webfan-server",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
-   "publishConfig": {
-     "access":"public",
-     "registry": "https://npm.pkg.github.com/frdl"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/frdl"
   },
   "scripts": {
-     "postinstall" : "npm-auto ./index.js"
+    "postinstall": "npm-auto ./index.js"
   },
   "keywords": [
     "reverse-proxy",
@@ -22,32 +22,30 @@
   "homepage": "https://github.com/frdl/webfan-server",
   "repository": "https://github.com/frdl/webfan-server.git",
   "dependencies": {
-    "mkdir" : "latest",
-    "node-json2html" : "latest",
+    "mkdir": "latest",
+    "node-json2html": "latest",
     "decache": "4.6.0",
-    "npm-auto":"1.0.1",
-    "winston-syslog" : "latest",
-    "winston" : "latest",
-    "winston-daily-rotate-file" : "latest",
+    "npm-auto": "1.0.1",
+    "winston-syslog": "latest",
+    "winston": "latest",
+    "winston-daily-rotate-file": "latest",
     "http-proxy": ">=1.18.1",
     "http2": "latest",
     "redwire": "latest",
     "ip": "latest",
     "finalhandler": "latest",
     "serve-static": "latest",
-    "@betafcc/deep-merge" : "latest",    
-    "redbird" : "^0.10.0",
+    "@betafcc/deep-merge": "latest",
+    "redbird": "^0.10.0",
     "greenlock": "^2.4.2",
     "le-acme-core": "^2.1.3",
     "hubbie": "^4.2.0",
-    "request-ip" : "2.1.3"
+    "request-ip": "2.1.3"
   },
   "devDependencies": {
-       "yarn" : "latest",
-       "@frdl/frdl" : "latest",
-       "get-lets-encrypt-servers" : "1.0.0"
+    "yarn": "latest",
+    "@frdl/frdl": "latest",
+    "get-lets-encrypt-servers": "1.0.0"
   },
-  "peerDependencies": {
-    
-  }
+  "peerDependencies": {}
 }
