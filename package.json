@@ -3,12 +3,8 @@
   "version": "0.1.20",
   "description": "Proxy, LoadBalancer, vHost Multiserver Application",
   "main": "index.js",
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com/frdl"
-  },
   "scripts": {
-    "postinstall": "npm-auto ./index.js"
+    "postinstall:fixdeps": "npm-auto ./index.js"
   },
   "keywords": [
     "reverse-proxy",
