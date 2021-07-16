@@ -7,12 +7,12 @@ if (typeof(PhusionPassenger) != 'undefined') {
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
-var finalhandler = require('finalhandler');
+//var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 var deepMerge = require('@betafcc/deep-merge');
-var Redwire = require('redwire');
+//var Redwire = require('redwire');
 var url_parse = url.parse;
-var ip = require('ip');
+//var ip = require('ip');
 
 
 const arrayDeepMerge = deepMerge.addCase(
@@ -23,20 +23,21 @@ const arrayDeepMerge = deepMerge.addCase(
 
 module.exports.create = conf => {
 'use strict';
-	
-	var that=this;
-	//var logger=require('./logging');
-	var logger=this.logger;
-	
-var myIp = ip.address();
 
+ var that=this;
+var ip =that.ip;
+	//var logger=require('./logging');
+var logger=that.logger;
+var Redwire = that.redwire;	
+var myIp = ip.address();
+var finalhandler = that.finalhandler;
 //var target = '212.72.182.211';
-var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
+//var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
 
 var Port = process.env.port;
 
 //var target = '212.72.182.211';
-var target = 'https://frdl.ws/frdlwebuserworkspace';
+var _target = 'https://frdl.ws/frdlwebuserworkspace';
 
 var config = deepMerge(require('./get-configuration'), this.config || {});
 
@@ -66,9 +67,16 @@ function wildCardHandler(mount, url, req, res, next)=>{
 	  var domain =  dns[1] + '.' + dns[0];
 	  var host = pieces.host;
 	
+	  target
+	
+	   var target = _target;
+	   try{
+		    if('string'===typeof config.vhosts.default.target){
+			target =config.vhosts.default.target;     
+		    }
 	   var rule = {
-		   target: config.vhosts.default.target//,
-		//   host : host
+		   target: target
+		//  , host : host
 	   };
 	  
     // req.target is what redwire.proxy() uses to proxy to
@@ -115,7 +123,10 @@ function wildCardHandler(mount, url, req, res, next)=>{
 	          if('string'===typeof rule.url){
 			    req.url = rule.url;
 		   }
-	
+		   if(true===typeof rule.xfwd){
+			 res.headers['x-forwarded-host'] = req.host;
+			 res.headers['x-forwarded-for'] = req.host;  
+		   }
 	    logger.info('Hit target: ', {req:req, mount:mount, url:url});
 	  
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
