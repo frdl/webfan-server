@@ -16,6 +16,7 @@ var url_parse = url.parse;
 var requestIp = require('request-ip');
 var net = require('net');
 var mkdir = require('mkdir');
+var path = require('path');
 
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
@@ -69,9 +70,9 @@ function getHostFiles(mount, url, req){
 	  var domain =  dns[1] + '.' + dns[0];
 	  var host = pieces.host;	
 	
-	
-	 var domainmetrics = config.vhosts.dir + domain+'/'+config.vhosts.domainmetrics;	 
-	 var subdomainmetrics = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.domainmetrics;	
+
+	 var domainmetrics = config.vhosts.dir + domain+'/.webfan/meta/'+config.vhosts.domainmetrics;	 
+	 var subdomainmetrics = config.vhosts.dir +domain+'/'+host+'/.webfan/meta/'+config.vhosts.domainmetrics;	
 	
 	 var domainfile = config.vhosts.dir + domain+'/'+config.vhosts.proxyfile;	 
 	 var subdomainfile = config.vhosts.dir +domain+'/'+host+'/'+config.vhosts.proxyfile;
@@ -192,8 +193,26 @@ function wildCardHandler(mount, url, req, res, next)=>{
 			 res.headers['x-forwarded-for'] = req.reqIp;  
 		   }
 	
-	    logger.info('Hit target: ', {req:req, mount:mount, url:url});		
+	    logger.info('Hit target: ', {req:req, mount:mount, url:url, fromIp:req.reqIp});		
 	
+	//req.reqIp
+          if(true!==Metafiles.host.mount.config.exists){
+		mkdir(path.dirname(Metafiles.host.mount.config.file)/*, x0755*/);
+		fs.writeFile(Metafiles.host.mount.config.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+		   if(e){
+			logger.info(e);   
+		   }
+		});
+	  }
+	
+	  if(true!==Metafiles.domain.mount.router.exists){
+		mkdir(path.dirname(Metafiles.domain.mount.config.file)/*, x0755*/);
+		fs.writeFile(Metafiles.domain.mount.config.file, JSON.stringify({req:req, mount:mount, url:url, fromIp:req.reqIp}) , e=>{
+		   if(e){
+			logger.info(e);   
+		   }
+		});		  
+	  }     
 	
 	  if(true===Metafiles.host.mount.vhost.exists){
 		  var done = finalhandler(req, res);
