@@ -5,13 +5,13 @@ if (typeof(PhusionPassenger) != 'undefined') {
 }
 */
 var fs = require('fs');
-var url = require('url');
+var Url = require('url');
 var http = require('http');
 //var finalhandler = require('finalhandler');
 var serveStatic = require('serve-static');
 var deepMerge = require('@betafcc/deep-merge');
 //var Redwire = require('redwire');
-var url_parse = url.parse;
+var url_parse = Url.parse;
 //var ip = require('ip');
 var requestIp = require('request-ip');
 var net = require('net');
@@ -22,7 +22,7 @@ const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
     (a, b) => a.concat(b)
 );
-
+const decache = require('decache');
 
 module.exports.create = conf => {
 'use strict';
@@ -36,7 +36,7 @@ var myIp = ip.address();
 var finalhandler = that.finalhandler;
 //var target = '212.72.182.211';
 //var target = 'https://frdl.ws/frdlwebuserworkspace/default.domain';
-const decache = require('decache');
+
 	
 var Port = process.env.port;
 
@@ -66,7 +66,7 @@ var redwire = new Redwire(options);
 	
 function getHostFiles(mount, url, req){
       var pieces = url_parse(url);	
-      var dns = pieces.host.split(/\./).reverse();
+      var dns = (pieces.host || req.host).split(/\./).reverse();
 	  var domain =  dns[1] + '.' + dns[0];
 	  var host = pieces.host;	
 	
@@ -230,6 +230,34 @@ function wildCardHandler(mount, url, req, res, next)=>{
 
 	
 function __frdl_decache(route, target){
+    var pieces = url_parse(route);
+    var Metafiles = getHostFiles(route, route, deepMerge(pieces, {
+       host : pieces.host,
+       url : Url.format(pieces),
+       protocol :  pieces.protocol
+    }));	
+	for(var appService in Metafiles.host.mount){
+		if(Metafiles.host.mount[appService].exists){
+			try{
+			  fs.unlink(Metafiles.host.mount[appService].file);
+			  decache(Metafiles.host.mount[appService].file);
+			}catch(_e){
+			  console.warn(_e);	
+			}
+		}
+		
+	}
+	for(var appService in Metafiles.domain.mount){
+		if(Metafiles.domain.mount[appService].exists){
+			try{
+			  fs.unlink(Metafiles.domain.mount[appService].file);
+			  decache(Metafiles.domain.mount[appService].file);
+			}catch(_e){
+			  console.warn(_e);	
+			}
+		}
+		
+	}	
 	
 }
 	
