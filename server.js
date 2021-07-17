@@ -192,7 +192,7 @@ function wildCardHandler(mount, url, req, res, next){
 		   }
 	
 	    logger.info('Hit target: ', {req:req, mount:mount, url:url});		
-	
+	/*
 	//req.reqIp
           if(true!==Metafiles.host.mount.metrics.exists){
 		mkdir(path.dirname(Metafiles.host.mount.metrics.file));
@@ -219,7 +219,7 @@ function wildCardHandler(mount, url, req, res, next){
 		  var done = finalhandler(req, res);
 		   return serveStatic(Metafiles.domain.mount.vhost.dir || Metafiles.domain.mount.vhost.file)(req, res, done);
 	  }		
-	
+	*/
 	   //  redwire.setHost(tpath.host).apply(this, arguments);
     //         redwire.setHost(pieces.host).apply(this, arguments);
     next();
@@ -245,6 +245,8 @@ function __frdl_decache(route, target){
 		}
 		
 	}
+	
+   if(Metafiles.domain.name === Metafiles.host.name){
 	for(var appService in Metafiles.domain.mount){
 		if(Metafiles.domain.mount[appService].exists){
 			try{
@@ -256,7 +258,7 @@ function __frdl_decache(route, target){
 		}
 		
 	}	
-	
+   }
 }
 	
  if(0<config.balancers.length){
@@ -273,8 +275,8 @@ function __frdl_decache(route, target){
 	      app : redwire
 	};	
 	
-[['http', '*'],['http2','*'], ['https', '*']].forEach(info=>{
-	
+//[['http', '*'], ['https', '*']].forEach(info=>{
+[['http', '*']].forEach(info=>{	
 	var app = redwire[info[0]](info[1]);
 	/*
 	app.use(requestIp.mw({ attributeName : 'reqIp' }));
