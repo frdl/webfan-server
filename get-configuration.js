@@ -148,80 +148,6 @@ var config = {
 
 
 
-var fileLocations = [process.cwd() +'/webfan-server.config', __dirname +'/webfan-server.config', __dirname +'/webfan-server.config.dist'];
-for(var i=0;i<fileLocations.length;i++){
-	var configfile = fileLocations[i];
-	  if(fs.existsSync(configfile)){
-		  config = deepMerge(config, require(configfile.substr(0,configfile.length-3)));
-		  break;
-	  }else if(fs.existsSync(configfile + '.js')){
-		  config = deepMerge(config, require(configfile ));
-		  break;
-	  }
-}
-
-module.exports=config;
-
- },
- proxy :  {
-  http: {
-    port: 8080//,
-   // websockets: false
-  },
-  http2: {
-    port: 80//,
-  //  websockets: false
-  },
-  https: {
-    port: 443//,
-   // websockets: false
-  //  key: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.key',
-  //  cert: '/Users/tcoats/MetOcean/tugboat/harmony/metoceanview.com.crt'
-  },
-  proxy : {
-	   xfwd: false,
-           prependPath: false  // ,
-       //    keepAlive: false
-  },
-  log: {
-        debug: function() {
-	 logMessage('debug', ...arguments);
-	},
-        notice: function() {
-	  logMessage('notice', ...arguments);
-	},
-        log: function() {
-	   logMessage('log', ...arguments);
-	},
-        warn: function() {
-	   logMessage('warn', ...arguments);
-	},
-        info: function() {
-	  logMessage('info', ...arguments);
-	},
-        error: function(err) {
-            if (err.stack) {
-                console.error(err.stack);
-		    logMessage('error', [err.stack]);
-            } else {
-                console.error(err);
-		    logMessage('error', [err]);
-            }
-        }
-    }
- },
- logrotate:{
-    frequency : '1h',	 
-    dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
-    filename: `webfan-server-${Port}-%DATE%.log.txt`,
-    datePattern: 'YYYY-MM-DD-HH',
-    zippedArchive: true,
-    maxSize: '4096k',
-    maxFiles: '7d'
-  }
-};
-
-
 
 var fileLocations = [process.cwd() +'/webfan-server.config', __dirname +'/webfan-server.config', __dirname +'/webfan-server.config.dist'];
 for(var i=0;i<fileLocations.length;i++){
@@ -234,5 +160,6 @@ for(var i=0;i<fileLocations.length;i++){
 		  break;
 	  }
 }
+
 
 module.exports=config;
