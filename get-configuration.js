@@ -227,10 +227,10 @@ var fileLocations = [process.cwd() +'/webfan-server.config', __dirname +'/webfan
 for(var i=0;i<fileLocations.length;i++){
 	var configfile = fileLocations[i];
 	  if(fs.existsSync(configfile)){
-		  config = arrayDeepMerge(config, require(configfile.substr(0,configfile.length-3)));
+		  config =require(configfile.substr(0,configfile.length-3));
 		  break;
 	  }else if(fs.existsSync(configfile + '.js')){
-		  config = arrayDeepMerge(config, require(configfile ));
+		  config =  require(configfile);
 		  break;
 	  }
 }
