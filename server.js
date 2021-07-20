@@ -53,7 +53,33 @@ var config = deepMerge(require('./get-configuration'), this.config || {});
 		  config = deepMerge(config, require(conf));
 	  }
 
-
+ config.log = {
+        debug: function() {
+	 logMessage('debug', ...arguments);
+	},
+        notice: function() {
+	  logMessage('notice', ...arguments);
+	},
+        log: function() {
+	   logMessage('log', ...arguments);
+	},
+        warn: function() {
+	   logMessage('warn', ...arguments);
+	},
+        info: function() {
+	  logMessage('info', ...arguments);
+	},
+        error: function(err) {
+            if (err.stack) {
+                console.error(err.stack);
+		    logMessage('error', [err.stack]);
+            } else {
+                console.error(err);
+		    logMessage('error', [err]);
+            }
+        }
+    }
+ };
 var options = config.proxy;
 
 
