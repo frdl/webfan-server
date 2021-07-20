@@ -17,7 +17,15 @@ var requestIp = require('request-ip');
 
 var mkdir = require('mkdir');
 var path = require('path');
-
+async function logMessage(type, args){
+	var method2 = ('function'===typeof console[type]) ? console[type] : console.log;
+	method2(...args);
+	
+      var logger=require('./logging');
+       var method = ('function'===typeof logger[type]) ? logger[type] : logger.log;
+	method(...args);	
+	
+}
 const arrayDeepMerge = deepMerge.addCase(
     [Array.isArray, Array.isArray],
     (a, b) => a.concat(b)
