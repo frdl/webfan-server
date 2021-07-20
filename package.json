@@ -36,7 +36,8 @@
     "greenlock": "^2.4.2",
     "le-acme-core": "^2.1.3",
     "hubbie": "^4.2.0",
-    "request-ip": "2.1.3"
+    "request-ip": "2.1.3",
+    "tg-redbird": "latest"
   },
   "devDependencies": {
     "yarn": "latest",
