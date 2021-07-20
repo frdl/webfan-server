@@ -11,15 +11,7 @@ const arrayDeepMerge = deepMerge.addCase(
 );
 
 
-async function logMessage(type, args){
-	var method2 = ('function'===typeof console[type]) ? console[type] : console.log;
-	method2(...args);
-	
-      var logger=require('./logging');
-       var method = ('function'===typeof logger[type]) ? logger[type] : logger.log;
-	method(...args);	
-	
-}
+
 
 var myIp = ip.address();
 
