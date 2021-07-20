@@ -65,34 +65,7 @@ var config = {
            prependPath: false  // ,
        //    keepAlive: false
   },
-  log: {
-        debug: function() {
-	 logMessage('debug', ...arguments);
-	},
-        notice: function() {
-	  logMessage('notice', ...arguments);
-	},
-        log: function() {
-	   logMessage('log', ...arguments);
-	},
-        warn: function() {
-	   logMessage('warn', ...arguments);
-	},
-        info: function() {
-	  logMessage('info', ...arguments);
-	},
-        error: function(err) {
-            if (err.stack) {
-                console.error(err.stack);
-		    logMessage('error', [err.stack]);
-            } else {
-                console.error(err);
-		    logMessage('error', [err]);
-            }
-        }
-    }
- },
- logrotate:{
+  logrotate:{
     frequency : '1h',	 
     dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
     filename: `webfan-server-${Port}-%DATE%.log.txt`,
