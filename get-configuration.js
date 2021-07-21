@@ -1,6 +1,7 @@
 
 
 
+
 var fs = require('fs');
 var deepMerge = require('@betafcc/deep-merge');
 var ip = require('ip');
@@ -56,7 +57,7 @@ var config = {
 	   xfwd: false,
            prependPath: false  // ,
        //    keepAlive: false
-  },
+  }},
   logrotate:{
     frequency : '1h',	 
     dirname: (fs.existsSync(  process.cwd() + '/logs.userlogs/')) ?   process.cwd() + '/logs.userlogs/' :  __dirname + '/logs.userlogs/',
