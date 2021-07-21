@@ -86,7 +86,7 @@ var config = deepMerge(require('./get-configuration'), this.config || {});
 		    logMessage('error', [err]);
             }
         }
-    }
+    
  };
 var options = config.proxy;
 
