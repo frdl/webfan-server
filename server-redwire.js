@@ -51,14 +51,14 @@ var Port = process.env.port;
 //var target = '212.72.182.211';
 var _target = 'https://frdl.ws/frdlwebuserworkspace';
 
-var config = deepMerge(require('./get-configuration'), this.config || {});
+var config = require('./get-configuration');
 
 	  if('object'===typeof conf && null!==conf && !Array.isArray(conf)){
-		  config = deepMerge(config, conf);
+		  config = conf;
 	  }else if('string'===typeof conf && fs.existsSync(conf)){
-		  config = deepMerge(config, require(conf.substr(0, conf.length-3)));
+		  config =  require(conf.substr(0, conf.length-3));
 	  }else if('string'===typeof conf && fs.existsSync(conf + '.js')){
-		  config = deepMerge(config, require(conf));
+		  config = require(conf);
 	  }
 
  config.log = {
