@@ -13,9 +13,7 @@ Example server.js
 var path = require('path');
 var Server = require("@frdl/webfan-server");
 
-/*
-var mountHandlers =Server.create(path.resolve(__dirname, 'webfan-server.config.js'));
-*/
 var WebfanServer = new Server();
-WebfanServer.create(path.resolve(__dirname, 'webfan-server.config.js'));
+//WebfanServer.create('wired')(path.resolve(__dirname, 'webfan-server.config.js'));
+WebfanServer.create('bird')(...options);
 ````
