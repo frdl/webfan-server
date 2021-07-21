@@ -158,7 +158,7 @@ Server.prototype.constructor=function(options){
 				app:app.app || function(mount, req,res,next){}
 			});
 		  s.apps = apps;
-		   ServersApps.set(that, s),
+		   ServersApps.set(that, s);
 	  }
   });	  
   prop(that, 'close', {
