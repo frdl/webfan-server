@@ -1,13 +1,9 @@
 
 
 var fs = require('fs');
-var deepMerge = require('@betafcc/deep-merge');
+
 var ip = require('ip');
 
-const arrayDeepMerge = deepMerge.addCase(
-    [Array.isArray, Array.isArray],
-    (a, b) => a.concat(b)
-);
 
 
 async function logMessage(type, args){
@@ -63,32 +59,7 @@ var config = {
            prependPath: false  // ,
        //    keepAlive: false
   },
-  log: {
-        debug: function() {
-	 logMessage('debug', ...arguments);
-	},
-        notice: function() {
-	  logMessage('notice', ...arguments);
-	},
-        log: function() {
-	   logMessage('log', ...arguments);
-	},
-        warn: function() {
-	   logMessage('warn', ...arguments);
-	},
-        info: function() {
-	  logMessage('info', ...arguments);
-	},
-        error: function(err) {
-            if (err.stack) {
-                console.error(err.stack);
-		    logMessage('error', [err.stack]);
-            } else {
-                console.error(err);
-		    logMessage('error', [err]);
-            }
-        }
-    }
+ 
  },
  logrotate:{
     frequency : '1h',	 
