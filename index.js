@@ -9,6 +9,7 @@ const arrayDeepMerge = deepMerge.addCase(
 );
 
 var prop = Object.defineProperty;
+const ServersApps = new WeakMap();
 
 function swapObjectFlip(obj) {
   return Object.keys(obj).reduce((ret, key) => {
@@ -98,10 +99,12 @@ Server.prototype.close = arg => {
 };
 
 Server.prototype.constructor=function(options){
-  
+  ServersApps.set(this, {	  
+	  apps:[]	  
+  });
   var _conf = arrayDeepMerge(require('./get-configuration'), options.config || {});
   var props = {},that=this;
-  var _apps = [];	
+
 
 	
 	
@@ -141,17 +144,21 @@ Server.prototype.constructor=function(options){
   });		
   prop(that, 'apps', {
   	get : ()=>{
-		  return _apps;
+		  return ServersApps.get(that).apps;
 	  },
 	  set : (app)=>{
+		  var s= ServersApps.get(that);
+		  var apps = s.apps;
 		  if(Array.isArray(app.type)){
 		       app.type = app.type.join('#');	  
 		  }
-		  _apps.push({
-			    name:app.name || 'App' + _apps.length.toString(),
-				type : app.type || 'UNDEFINED#UNDEFINED#UNDEFINED' + _apps.length.toString(),
+		   apps.push({
+			    name:app.name || 'App' +  apps.length.toString(),
+				type : app.type || 'UNDEFINED#UNDEFINED#UNDEFINED' + apps.length.toString(),
 				app:app.app || function(mount, req,res,next){}
 			});
+		  s.apps = apps;
+		   ServersApps.set(that, s),
 	  }
   });	  
   prop(that, 'close', {
@@ -213,8 +220,27 @@ Server.prototype.constructor=function(options){
 };
 
 
-Server.prototype.create = (conf) =>{
-	 return require( "./server").create.apply(this,[conf, this]);
+Server.prototype.create = (engine) =>{
+	switch(engine){
+		case 'wire':
+		case 'wired':
+		  var server = require( "./server-redwire");	  
+		break;
+		case undefined:
+		case 'bird':
+		case 'birded':	
+		  var server = require( "./server-tg-redbird");	  
+		 // var server = require( "tg-redbird");	  
+		break;
+		default:
+		   var server = require( "./server-" + engine);
+			//throw new Error(`The server ${engine} is not available`);
+		break;
+	}
+	
+	return (conf) =>{
+	   return server.create.apply(this,[conf, this]);
+        };
 };
 
 
@@ -239,7 +265,13 @@ Server.prototype.create = (conf) =>{
 		  return require( "redbird");
 	  }
   });	  
-  
+ 
+  prop(Server.prototype, 'tgredbird', {
+  	get : ()=>{
+		  return require( "tg-redbird");
+	  }
+  });	  
+
   prop(Server.prototype, 'finalhandler', {
   	get : ()=>{
 		  return require( "finalhandler");
