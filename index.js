@@ -278,6 +278,11 @@ Server.prototype.create = (engine) =>{
 	  }
   });	
 
+  prop(Server.prototype, 'ExpressMiddlewareHelpers', {
+  	get : ()=>{
+		  return require('http-proxy-middleware');
+	  }
+  });
 
   prop(Server, 'create', {
   	get : ()=>{
